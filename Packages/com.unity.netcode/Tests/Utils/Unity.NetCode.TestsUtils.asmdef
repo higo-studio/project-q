@@ -1,0 +1,25 @@
+{
+    "name": "Unity.NetCode.TestsUtils",
+    "references": [
+        "Unity.Burst",
+        "Unity.Collections",
+        "Unity.Mathematics",
+        "Unity.NetCode",
+        "Unity.NetCode.Editor",
+        "Unity.Entities",
+        "Unity.Entities.Hybrid",
+        "Unity.Transforms",
+        "Unity.Networking.Transport",
+        "Unity.NetCode.Authoring.Hybrid"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": true,
+    "autoReferenced": false,
+    "versionDefines": [],
+    "noEngineReferences": false
+}

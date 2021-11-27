@@ -1,0 +1,18 @@
+{
+    "Dependencies": [
+        "GlobalObjectId_V1-1-c913dbf40fe37d246a6c50871010c177-93214019566545601-0"
+    ],
+    "Components": [
+        {
+            "$type": "Unity.Build.Common.PlayerScriptingDefines, Unity.Build",
+            "Defines": [
+                "UNITY_CLIENT",
+                "CUSTOM_DEBUG"
+            ]
+        },
+        {
+            "$type": "NetCodeConversionSettings, Unity.NetCode.Authoring.Hybrid",
+            "Target": 2
+        }
+    ]
+}
