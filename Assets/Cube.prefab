@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3848017905969011046
+--- !u!1 &2910722142939036148
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7873643483848558731}
-  - component: {fileID: 7517275534991812245}
+  - component: {fileID: 8090396445762545689}
+  - component: {fileID: 8123905751098960203}
   m_Layer: 0
   m_Name: Player Camera
   m_TagString: Untagged
@@ -17,33 +17,58 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7873643483848558731
+--- !u!4 &8090396445762545689
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3848017905969011046}
+  m_GameObject: {fileID: 2910722142939036148}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.34, z: -3.39}
+  m_LocalPosition: {x: 0, y: 1.55, z: -3.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5177885258673226676}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7517275534991812245
+--- !u!114 &8123905751098960203
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3848017905969011046}
+  m_GameObject: {fileID: 2910722142939036148}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41b0fbf6d2f7dc9468e1bcf0c63d4f22, type: 3}
+  m_Script: {fileID: 11500000, guid: e4686fb883f8b3e4cbb0116dda232913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AutoActivate: 1
   Priority: 0
+  Follow: {fileID: 5177885258673226676}
+  LookAt: {fileID: 5177885258673226676}
+  SplineCurvature: 0.2
+  TopRig:
+    Height: 4.5
+    Radius: 1.75
+  MiddleRig:
+    Height: 2.5
+    Radius: 3
+  BottomRig:
+    Height: 0.4
+    Radius: 1.3
+  XAxis:
+    Value: 0
+    MinValue: 0
+    MaxValue: 0
+    Acc: 0
+    Deacc: 0
+  YAxis:
+    Value: 0
+    MinValue: 0
+    MaxValue: 0
+    Acc: 0
+    Deacc: 0
 --- !u!1 &5177885258673226679
 GameObject:
   m_ObjectHideFlags: 0
@@ -78,8 +103,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 7873643483848558731}
   - {fileID: 2811391705997912625}
+  - {fileID: 8090396445762545689}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -286,7 +311,7 @@ MonoBehaviour:
   MaxIterations: 10
   CharacterMass: 1
   SkinWidth: 0.02
-  ContactTolerance: 0.3
+  ContactTolerance: 0.15
   AffectsPhysicsBodies: 0
 --- !u!114 &3128875885885663111
 MonoBehaviour:
@@ -461,7 +486,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.2, z: 0.2}
   m_Children: []
   m_Father: {fileID: 5177885258673226676}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7610541803733229889
 MeshFilter:

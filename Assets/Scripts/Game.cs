@@ -23,7 +23,7 @@ public class Game : SystemBase
     {
         var tickrateEnt = world.EntityManager.CreateEntity(typeof(ClientServerTickRate));
         var tick = default(ClientServerTickRate);
-        tick.SimulationTickRate = 30;
+        tick.SimulationTickRate = 60;
         tick.ResolveDefaults();
         world.EntityManager.SetComponentData(tickrateEnt, tick);
     }

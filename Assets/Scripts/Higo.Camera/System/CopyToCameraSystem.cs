@@ -7,8 +7,7 @@ using Unity.NetCode;
 namespace Higo.Camera
 {
     [UpdateInWorld(UpdateInWorld.TargetWorld.Client)]
-    [UpdateInGroup(typeof(TransformSystemGroup), OrderLast = true)]
-    [UpdateBefore(typeof(EndFrameTRSToLocalToWorldSystem))]
+    [UpdateInGroup(typeof(CameraSystemGroup), OrderLast = true)]
     [AlwaysSynchronizeSystem]
     public class CopyToCameraSystem : ComponentSystem
     {
@@ -22,20 +21,7 @@ namespace Higo.Camera
         {
             var brainEnt = GetSingletonEntity<CameraBrainComponent>();
             var brain = GetSingleton<CameraBrainComponent>();
-            if (Entity.Null == brain.CurrentCamera)
-            {
-                var maxPriority = -1;
-                Entities.ForEach((Entity entity, ref VirtualCameraComponent vcam) =>
-                {
-                    if (vcam.Priority > maxPriority)
-                    {
-                        maxPriority = vcam.Priority;
-                        brain.CurrentCamera = entity;
-                        PostUpdateCommands.SetComponent(brainEnt, brain);
-                    }
-                });
-                return;
-            }
+
 
             if (Entity.Null == brain.CurrentCamera) return;
 
