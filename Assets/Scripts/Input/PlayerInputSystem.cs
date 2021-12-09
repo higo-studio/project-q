@@ -4,6 +4,7 @@ using System;
 using Unity.NetCode;
 using Unity.Mathematics;
 using UnityEngine.InputSystem;
+using Higo.Camera;
 
 [UpdateInGroup(typeof(GhostInputSystemGroup))]
 [AlwaysSynchronizeSystem]
@@ -64,6 +65,13 @@ public class InputSystem : ComponentSystem, InputActions.IPlayerActions
                 }
             });
             return;
+        }
+
+        if (HasSingleton<CameraControllerComponent>())
+        {
+            var controller = GetSingleton<CameraControllerComponent>();
+            controller.Axis = m_looking;
+            SetSingleton(controller);
         }
 
         var input = default(PlayerInputComponent);

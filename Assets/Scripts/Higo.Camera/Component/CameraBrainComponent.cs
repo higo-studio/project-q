@@ -1,9 +1,15 @@
 using Unity.Entities;
+using Unity.Mathematics;
+
 namespace Higo.Camera
 {
-    [GenerateAuthoringComponent]
     public struct CameraBrainComponent : IComponentData
     {
         public Entity CurrentCamera;
+    }
+
+    public struct CameraControllerComponent : IComponentData
+    {
+        public float2 Axis;
     }
 }

@@ -7,7 +7,9 @@ using Unity.NetCode;
 namespace Higo.Camera
 {
     [UpdateInWorld(UpdateInWorld.TargetWorld.Client)]
-    [UpdateInGroup(typeof(CameraSystemGroup), OrderLast = true)]
+    [UpdateInGroup(typeof(TransformSystemGroup))]
+    [UpdateBefore(typeof(CopyTransformToGameObjectSystem))]
+    [UpdateAfter(typeof(EndFrameWorldToLocalSystem))]
     [AlwaysSynchronizeSystem]
     public class CopyToCameraSystem : ComponentSystem
     {

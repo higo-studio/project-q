@@ -1,5 +1,7 @@
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Burst;
+using Unity.Transforms;
 
 namespace Higo.Camera
 {
@@ -11,22 +13,38 @@ namespace Higo.Camera
         protected override void OnCreate()
         {
             RequireSingletonForUpdate<CameraBrainComponent>();
+            RequireSingletonForUpdate<CameraControllerComponent>();
         }
         protected override void OnUpdate()
         {
+            var controller = GetSingleton<CameraControllerComponent>();
+            var deltaTime = Time.DeltaTime;
             Entities.ForEach((
                 ref CameraFreeLookParamComponent freeLookParam,
+                ref LocalToParent local2Parent,
                 in DynamicBuffer<CameraFreeLookCachedBuffer> freeLookCachedBuffer,
                 in CameraActiveComponent activeState,
                 in VirtualCameraComponent vcam) =>
             {
-                if (activeState.Value != CameraActiveState.Running) return;
+                if (activeState.Value != CameraActiveState.Running
+                    || Entity.Null == vcam.Follow) return;
                 // update axis
+                AxisMaxSpeedUpdate(ref freeLookParam.XAxis, controller.Axis.x, deltaTime);
+                AxisMaxSpeedUpdate(ref freeLookParam.YAxis, controller.Axis.y, deltaTime);
+                var localPos = CameraUtility.GetLocalPositionForCameraFromInput(freeLookParam.YAxis.Value, freeLookCachedBuffer);
+                var localRot = quaternion.AxisAngle(math.up(), freeLookParam.YAxis.Value);
+                var localTRS = float4x4.TRS(localPos, localRot, new float3(1));
 
+                if (Entity.Null != vcam.LookAt)
+                {
+                    var targetPos = GetComponent<Translation>(vcam.LookAt);
+                    float4x4.LookAt(localPos, targetPos, )
+                }
             }).Schedule();
         }
 
-        float AxisGetMaxSpeed(ref CameraAxis axis)
+        [BurstCompile]
+        static float AxisGetMaxSpeed(in CameraAxis axis)
         {
             float range = axis.MaxValue - axis.MinValue;
             if (!axis.Wrap && range > 0)
@@ -46,7 +64,8 @@ namespace Higo.Camera
             return axis.MaxSpeed;
         }
 
-        bool AxisMaxSpeedUpdate(ref CameraAxis axis, float input, float deltaTime)
+        [BurstCompile]
+        static bool AxisMaxSpeedUpdate(ref CameraAxis axis, float input, float deltaTime)
         {
             if (axis.MaxSpeed > Epsilon)
             {
@@ -74,7 +93,7 @@ namespace Higo.Camera
             }
 
             // Clamp our max speeds so we don't go crazy
-            float MaxSpeed = AxisGetMaxSpeed(ref axis);
+            float MaxSpeed = AxisGetMaxSpeed(in axis);
             axis.CurrentSpeed = math.clamp(axis.CurrentSpeed, -MaxSpeed, MaxSpeed);
 
             axis.Value += axis.CurrentSpeed * deltaTime;

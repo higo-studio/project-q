@@ -25,7 +25,7 @@ namespace Higo.Camera
                 in cachedKnots, ref cachedCtrl1, ref cachedCtrl2);
         }
 
-        public static float3 GetLocalPositionForCameraFromInput(float t, ref DynamicBuffer<CameraFreeLookCachedBuffer> buffer)
+        public static float3 GetLocalPositionForCameraFromInput(float t, in DynamicBuffer<CameraFreeLookCachedBuffer> buffer)
         {
             int n = 1;
             if (t > 0.5f)
