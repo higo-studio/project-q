@@ -5,7 +5,7 @@ using Unity.Transforms;
 
 namespace Higo.Camera
 {
-    [UpdateInGroup(typeof(CameraSystemGroup))]
+    [UpdateInGroup(typeof(CameraLateUpdateGroup))]
     public class CameraFreeLookSystem : SystemBase
     {
         public const float Epsilon = CameraUtility.Epsilon;
@@ -19,9 +19,10 @@ namespace Higo.Camera
         {
             var controller = GetSingleton<CameraControllerComponent>();
             var deltaTime = Time.DeltaTime;
-            Entities.ForEach((
+            var postCommandBuffer = new EntityCommandBuffer(Unity.Collections.Allocator.TempJob);
+            Entities.WithoutBurst().ForEach((
+                Entity e,
                 ref CameraFreeLookParamComponent freeLookParam,
-                ref LocalToParent local2Parent,
                 in DynamicBuffer<CameraFreeLookCachedBuffer> freeLookCachedBuffer,
                 in CameraActiveComponent activeState,
                 in VirtualCameraComponent vcam) =>
@@ -32,15 +33,22 @@ namespace Higo.Camera
                 AxisMaxSpeedUpdate(ref freeLookParam.XAxis, controller.Axis.x, deltaTime);
                 AxisMaxSpeedUpdate(ref freeLookParam.YAxis, controller.Axis.y, deltaTime);
                 var localPos = CameraUtility.GetLocalPositionForCameraFromInput(freeLookParam.YAxis.Value, freeLookCachedBuffer);
-                var localRot = quaternion.AxisAngle(math.up(), freeLookParam.YAxis.Value);
-                var localTRS = float4x4.TRS(localPos, localRot, new float3(1));
+                var localTRS = float4x4.Translate(localPos);
+                var parentTRS = float4x4.EulerYXZ(0, freeLookParam.XAxis.Value, 0);
+                var targetL2W = GetComponent<LocalToWorld>(vcam.Follow);
+                var lookAtL2W = GetComponent<LocalToWorld>(vcam.LookAt);
 
-                if (Entity.Null != vcam.LookAt)
+                var worldTRS = math.mul(math.mul(targetL2W.Value, parentTRS), localTRS);
+                var worldPos = new float3(worldTRS.c3.x, worldTRS.c3.y, worldTRS.c3.z);
+                var lookAtTRS = float4x4.LookAt(worldPos, lookAtL2W.Position, math.up());
+                postCommandBuffer.SetComponent(e, new LocalToWorld()
                 {
-                    var targetPos = GetComponent<Translation>(vcam.LookAt);
-                    float4x4.LookAt(localPos, targetPos, )
-                }
-            }).Schedule();
+                    Value = math.mul(worldTRS, lookAtTRS)
+                });
+            }).Run();
+
+            postCommandBuffer.Playback(EntityManager);
+            postCommandBuffer.Dispose();
         }
 
         [BurstCompile]

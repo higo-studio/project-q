@@ -3,7 +3,7 @@ using Unity.Mathematics;
 
 namespace Higo.Camera
 {
-    [UpdateInGroup(typeof(CameraSystemGroup))]
+    [UpdateInGroup(typeof(CameraLateUpdateGroup))]
     public class CameraActivateSystem : SystemBase
     {
         protected override void OnCreate()

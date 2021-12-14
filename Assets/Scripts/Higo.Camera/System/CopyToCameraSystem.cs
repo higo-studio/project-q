@@ -9,7 +9,7 @@ namespace Higo.Camera
     [UpdateInWorld(UpdateInWorld.TargetWorld.Client)]
     [UpdateInGroup(typeof(TransformSystemGroup))]
     [UpdateBefore(typeof(CopyTransformToGameObjectSystem))]
-    [UpdateAfter(typeof(EndFrameWorldToLocalSystem))]
+    [UpdateAfter(typeof(CameraLateUpdateGroup))]
     [AlwaysSynchronizeSystem]
     public class CopyToCameraSystem : ComponentSystem
     {

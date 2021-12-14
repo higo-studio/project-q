@@ -5,9 +5,8 @@ using Unity.Transforms;
 namespace Higo.Camera
 {
     [UpdateInGroup(typeof(TransformSystemGroup))]
-    [UpdateAfter(typeof(TRSToLocalToParentSystem))]
-    [UpdateBefore(typeof(TRSToLocalToWorldSystem))]
-    public class CameraSystemGroup : ComponentSystemGroup
+    [UpdateAfter(typeof(EndFrameWorldToLocalSystem))]
+    public class CameraLateUpdateGroup : ComponentSystemGroup
     {
     }
 }

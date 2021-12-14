@@ -63,7 +63,7 @@ MonoBehaviour:
     MaxValue: 180
     AccelTime: 0.1
     DeaccelTime: 0.1
-    MaxSpeed: 300
+    MaxSpeed: 10
     CurrentSpeed: 0
     Wrap: 1
   YAxis:

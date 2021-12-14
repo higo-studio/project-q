@@ -76,7 +76,7 @@ public class InputSystem : ComponentSystem, InputActions.IPlayerActions
 
         var input = default(PlayerInputComponent);
         input.Movement = m_movement;
-        input.Looking = m_looking;
+        // input.Looking = m_looking;
         input.Jump = m_jumped;
         input.Tick = World.GetExistingSystem<ClientSimulationSystemGroup>().ServerTick;
         var inputBuffer = EntityManager.GetBuffer<PlayerInputComponent>(localInput);
