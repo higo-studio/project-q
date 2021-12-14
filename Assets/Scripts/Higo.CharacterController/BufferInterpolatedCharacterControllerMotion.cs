@@ -6,10 +6,9 @@
 // // using Unity.Physics.Stateful;
 // using Unity.Transforms;
 // using Unity.NetCode;
-// // override the behavior of BufferInterpolatedRigidBodiesMotion
 // [UpdateInGroup(typeof(GhostPredictionSystemGroup))]
 // // [UpdateAfter(typeof(BuildPhysicsWorld)), UpdateBefore(typeof(ExportPhysicsWorld))]
-// [/* UpdateAfter(typeof(BufferInterpolatedRigidBodiesMotion)),  */UpdateBefore(typeof(CharacterControllerStepSystem))]
+// [UpdateAfter(typeof(BufferInterpolatedRigidBodiesMotion)), UpdateBefore(typeof(CharacterControllerStepSystem))]
 // public class BufferInterpolatedCharacterControllerMotion : SystemBase
 // {
 //     CharacterControllerStepSystem m_CharacterControllerSystem;
@@ -22,19 +21,17 @@
 
 //     protected override void OnUpdate()
 //     {
-//         Dependency = Entities
+//         Entities
 //             .WithName("UpdateCCInterpolationBuffers")
 //             .WithNone<PhysicsExclude>()
-//             .WithBurst()
 //             .ForEach((ref PhysicsGraphicalInterpolationBuffer interpolationBuffer, in CharacterControllerInternalData ccInternalData, in Translation position, in Rotation orientation) =>
 //             {
 //                 interpolationBuffer = new PhysicsGraphicalInterpolationBuffer
 //                 {
 //                     PreviousTransform = new RigidTransform(orientation.Value, position.Value),
-//                     PreviousVelocity = ccInternalData.Velocity,
+//                     // PreviousVelocity = ccInternalData.Velocity,
 //                 };
 //             }).ScheduleParallel(Dependency);
-
-//         m_CharacterControllerSystem.AddInputDependency(Dependency);
+//         CompleteDependency();
 //     }
 // }
