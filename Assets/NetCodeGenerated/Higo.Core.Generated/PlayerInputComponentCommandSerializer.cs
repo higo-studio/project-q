@@ -9,7 +9,7 @@ using Unity.Transforms;
 using Unity.Mathematics;
 
 
-namespace Assembly_CSharp.Generated
+namespace Higo.Core.Generated
 {
     public struct PlayerInputComponentSerializer : ICommandDataSerializer<PlayerInputComponent>
     {
@@ -17,8 +17,9 @@ namespace Assembly_CSharp.Generated
         {
             writer.WriteFloat(data.Movement.x);
             writer.WriteFloat(data.Movement.y);
-            writer.WriteFloat(data.Looking.x);
-            writer.WriteFloat(data.Looking.y);
+            writer.WriteFloat(data.Forward.x);
+            writer.WriteFloat(data.Forward.y);
+            writer.WriteFloat(data.Forward.z);
             writer.WriteUInt(data.Jump ? 1u : 0);
             writer.WriteUInt(data.Shift ? 1u : 0);
         }
@@ -27,8 +28,9 @@ namespace Assembly_CSharp.Generated
         {
             data.Movement.x = reader.ReadFloat();
             data.Movement.y = reader.ReadFloat();
-            data.Looking.x = reader.ReadFloat();
-            data.Looking.y = reader.ReadFloat();
+            data.Forward.x = reader.ReadFloat();
+            data.Forward.y = reader.ReadFloat();
+            data.Forward.z = reader.ReadFloat();
             data.Jump = (reader.ReadUInt() != 0) ? true : false;
             data.Shift = (reader.ReadUInt() != 0) ? true : false;
         }
@@ -37,8 +39,9 @@ namespace Assembly_CSharp.Generated
         {
             writer.WritePackedFloatDelta(data.Movement.x, baseline.Movement.x, compressionModel);
             writer.WritePackedFloatDelta(data.Movement.y, baseline.Movement.y, compressionModel);
-            writer.WritePackedFloatDelta(data.Looking.x, baseline.Looking.x, compressionModel);
-            writer.WritePackedFloatDelta(data.Looking.y, baseline.Looking.y, compressionModel);
+            writer.WritePackedFloatDelta(data.Forward.x, baseline.Forward.x, compressionModel);
+            writer.WritePackedFloatDelta(data.Forward.y, baseline.Forward.y, compressionModel);
+            writer.WritePackedFloatDelta(data.Forward.z, baseline.Forward.z, compressionModel);
             writer.WritePackedUInt(data.Jump ? 1u : 0, compressionModel);
             writer.WritePackedUInt(data.Shift ? 1u : 0, compressionModel);
         }
@@ -47,8 +50,9 @@ namespace Assembly_CSharp.Generated
         {
             data.Movement.x = reader.ReadPackedFloatDelta(baseline.Movement.x, compressionModel);
             data.Movement.y = reader.ReadPackedFloatDelta(baseline.Movement.y, compressionModel);
-            data.Looking.x = reader.ReadPackedFloatDelta(baseline.Looking.x, compressionModel);
-            data.Looking.y = reader.ReadPackedFloatDelta(baseline.Looking.y, compressionModel);
+            data.Forward.x = reader.ReadPackedFloatDelta(baseline.Forward.x, compressionModel);
+            data.Forward.y = reader.ReadPackedFloatDelta(baseline.Forward.y, compressionModel);
+            data.Forward.z = reader.ReadPackedFloatDelta(baseline.Forward.z, compressionModel);
             data.Jump = (reader.ReadPackedUInt(compressionModel) != 0) ? true : false;
             data.Shift = (reader.ReadPackedUInt(compressionModel) != 0) ? true : false;
         }

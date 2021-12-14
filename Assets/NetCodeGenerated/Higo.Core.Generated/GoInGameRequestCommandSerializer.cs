@@ -9,7 +9,7 @@ using Unity.Transforms;
 using Unity.Mathematics;
 
 
-namespace Assembly_CSharp.Generated
+namespace Higo.Core.Generated
 {
     [BurstCompile]
     public struct GoInGameRequestSerializer : IComponentData, IRpcCommandSerializer<GoInGameRequest>

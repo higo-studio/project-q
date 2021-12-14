@@ -23,7 +23,12 @@ namespace VertexFragment
             var tick = group.PredictingTick;
             var deltaTime = Time.DeltaTime;
             var worldIdx = World.Name == "ServerWorld" ? 1 : 0;
-            Entities.ForEach((DynamicBuffer<PlayerInputComponent> inputBuffer, ref CharacterControllerComponentData cc, in PredictedGhostComponent prediction, in CharacterComponent character) =>
+            Entities.ForEach((
+                DynamicBuffer<PlayerInputComponent> inputBuffer,
+                ref CharacterControllerComponentData cc,
+                ref CharacterControllerTransform ccTrs,
+                in PredictedGhostComponent prediction,
+                in CharacterComponent character) =>
             {
                 if (!GhostPredictionSystemGroup.ShouldPredict(tick, prediction))
                     return;
@@ -32,8 +37,12 @@ namespace VertexFragment
                 cc.Movement = math.normalizesafe(input.Movement);
                 cc.MovementSpeed = 10f;
                 cc.Jumped = input.Jump ? 1 : 0;
-                cc.Looking.x = (int)(input.Looking.x * 1000_000);
-                cc.Looking.y = (int)(input.Looking.y * 1000_000);
+                // cc.Looking.x = (int)(input.Looking.x * 1000_000);
+                // cc.Looking.y = (int)(input.Looking.y * 1000_000);
+                if (math.distancesq(cc.Movement.x, cc.Movement.y) > 0)
+                {
+                    ccTrs.Value.rot = quaternion.LookRotation(mathEx.ProjectOnPlane(input.Forward, math.up()), math.up());
+                }
             }).ScheduleParallel();
         }
     }

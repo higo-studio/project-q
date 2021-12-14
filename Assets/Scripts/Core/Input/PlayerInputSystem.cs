@@ -5,6 +5,7 @@ using Unity.NetCode;
 using Unity.Mathematics;
 using UnityEngine.InputSystem;
 using Higo.Camera;
+using Unity.Transforms;
 
 [UpdateInGroup(typeof(GhostInputSystemGroup))]
 [AlwaysSynchronizeSystem]
@@ -76,9 +77,17 @@ public class InputSystem : ComponentSystem, InputActions.IPlayerActions
 
         var input = default(PlayerInputComponent);
         input.Movement = m_movement;
-        // input.Looking = m_looking;
         input.Jump = m_jumped;
         input.Tick = World.GetExistingSystem<ClientSimulationSystemGroup>().ServerTick;
+        if (HasSingleton<CameraBrainComponent>())
+        {
+            var brain = GetSingleton<CameraBrainComponent>();
+            if (Entity.Null != brain.CurrentCamera)
+            {
+                var l2w = EntityManager.GetComponentData<LocalToWorld>(brain.CurrentCamera);
+                input.Forward = l2w.Forward;
+            }
+        }
         var inputBuffer = EntityManager.GetBuffer<PlayerInputComponent>(localInput);
         inputBuffer.AddCommandData(input);
     }

@@ -11,10 +11,10 @@ using Unity.NetCode;
 using Unity.Transforms;
 using Unity.Mathematics;
 
-namespace Assembly_CSharp.Generated
+namespace Higo.Core.Generated
 {
     [BurstCompile]
-    public struct TrsWith000andInterpolateGhostComponentSerializer
+    public struct RotWith000andInterpolateGhostComponentSerializer
     {
         static GhostComponentSerializer.State GetState()
         {
@@ -23,16 +23,16 @@ namespace Assembly_CSharp.Generated
             {
                 s_State = new GhostComponentSerializer.State
                 {
-                    GhostFieldsHash = 8484511096828493541,
+                    GhostFieldsHash = 13806170254378846403,
                     ExcludeFromComponentCollectionHash = 0,
-                    ComponentType = ComponentType.ReadWrite<Unity.Transforms.Translation>(),
-                    ComponentSize = UnsafeUtility.SizeOf<Unity.Transforms.Translation>(),
+                    ComponentType = ComponentType.ReadWrite<Unity.Transforms.Rotation>(),
+                    ComponentSize = UnsafeUtility.SizeOf<Unity.Transforms.Rotation>(),
                     SnapshotSize = UnsafeUtility.SizeOf<Snapshot>(),
                     ChangeMaskBits = ChangeMaskBits,
                     SendMask = GhostComponentSerializer.SendMask.Interpolated | GhostComponentSerializer.SendMask.Predicted,
                     SendToOwner = SendToOwnerType.All,
                     SendForChildEntities = 0,
-                    VariantHash = 12563096336180199909,
+                    VariantHash = 17437014662821627546,
                     CopyToSnapshot =
                         new PortableFunctionPointer<GhostComponentSerializer.CopyToFromSnapshotDelegate>(CopyToSnapshot),
                     CopyFromSnapshot =
@@ -61,9 +61,10 @@ namespace Assembly_CSharp.Generated
         public static GhostComponentSerializer.State State => GetState();
         public struct Snapshot
         {
-            public int Value_x;
-            public int Value_y;
-            public int Value_z;
+            public int ValueX;
+            public int ValueY;
+            public int ValueZ;
+            public int ValueW;
         }
         public const int ChangeMaskBits = 1;
         [BurstCompile]
@@ -73,11 +74,12 @@ namespace Assembly_CSharp.Generated
             for (int i = 0; i < count; ++i)
             {
                 ref var snapshot = ref GhostComponentSerializer.TypeCast<Snapshot>(snapshotData, snapshotOffset + snapshotStride*i);
-                ref var component = ref GhostComponentSerializer.TypeCast<Unity.Transforms.Translation>(componentData, componentStride*i);
+                ref var component = ref GhostComponentSerializer.TypeCast<Unity.Transforms.Rotation>(componentData, componentStride*i);
                 ref var serializerState = ref GhostComponentSerializer.TypeCast<GhostSerializerState>(stateData, 0);
-                snapshot.Value_x = (int) math.round(component.Value.x * 1000);
-                snapshot.Value_y = (int) math.round(component.Value.y * 1000);
-                snapshot.Value_z = (int) math.round(component.Value.z * 1000);
+                snapshot.ValueX = (int)math.round(component.Value.value.x * 1000);
+                snapshot.ValueY = (int)math.round(component.Value.value.y * 1000);
+                snapshot.ValueZ = (int)math.round(component.Value.value.z * 1000);
+                snapshot.ValueW = (int)math.round(component.Value.value.w * 1000);
             }
         }
         [BurstCompile]
@@ -102,11 +104,12 @@ namespace Assembly_CSharp.Generated
                 deserializerState.SnapshotTick = snapshotInterpolationData.Tick;
                 float snapshotInterpolationFactorRaw = snapshotInterpolationData.InterpolationFactor;
                 float snapshotInterpolationFactor = snapshotInterpolationFactorRaw;
-                ref var component = ref GhostComponentSerializer.TypeCast<Unity.Transforms.Translation>(componentData, componentStride*i);
+                ref var component = ref GhostComponentSerializer.TypeCast<Unity.Transforms.Rotation>(componentData, componentStride*i);
                 snapshotInterpolationFactor = math.max(snapshotInterpolationFactorRaw, 0);
-                var Value_Before = new float3(snapshotBefore.Value_x * 0.001f, snapshotBefore.Value_y * 0.001f, snapshotBefore.Value_z * 0.001f);
-                var Value_After = new float3(snapshotAfter.Value_x * 0.001f, snapshotAfter.Value_y * 0.001f, snapshotAfter.Value_z * 0.001f);
-                component.Value = math.lerp(Value_Before, Value_After, snapshotInterpolationFactor);
+                var Value_Before = math.normalize(new quaternion(snapshotBefore.ValueX * 0.001f, snapshotBefore.ValueY * 0.001f, snapshotBefore.ValueZ * 0.001f, snapshotBefore.ValueW * 0.001f));
+                var Value_After = math.normalize(new quaternion(snapshotAfter.ValueX * 0.001f, snapshotAfter.ValueY * 0.001f, snapshotAfter.ValueZ * 0.001f, snapshotAfter.ValueW * 0.001f));
+                component.Value = math.slerp(Value_Before,
+                    Value_After, snapshotInterpolationFactor);
 
             }
         }
@@ -116,11 +119,9 @@ namespace Assembly_CSharp.Generated
         [MonoPInvokeCallback(typeof(GhostComponentSerializer.RestoreFromBackupDelegate))]
         private static void RestoreFromBackup(IntPtr componentData, IntPtr backupData)
         {
-            ref var component = ref GhostComponentSerializer.TypeCast<Unity.Transforms.Translation>(componentData, 0);
-            ref var backup = ref GhostComponentSerializer.TypeCast<Unity.Transforms.Translation>(backupData, 0);
-            component.Value.x = backup.Value.x;
-            component.Value.y = backup.Value.y;
-            component.Value.z = backup.Value.z;
+            ref var component = ref GhostComponentSerializer.TypeCast<Unity.Transforms.Rotation>(componentData, 0);
+            ref var backup = ref GhostComponentSerializer.TypeCast<Unity.Transforms.Rotation>(backupData, 0);
+            component.Value = backup.Value;
         }
 
         [BurstCompile]
@@ -130,9 +131,10 @@ namespace Assembly_CSharp.Generated
             ref var snapshot = ref GhostComponentSerializer.TypeCast<Snapshot>(snapshotData);
             ref var baseline1 = ref GhostComponentSerializer.TypeCast<Snapshot>(baseline1Data);
             ref var baseline2 = ref GhostComponentSerializer.TypeCast<Snapshot>(baseline2Data);
-            snapshot.Value_x = predictor.PredictInt(snapshot.Value_x, baseline1.Value_x, baseline2.Value_x);
-            snapshot.Value_y = predictor.PredictInt(snapshot.Value_y, baseline1.Value_y, baseline2.Value_y);
-            snapshot.Value_z = predictor.PredictInt(snapshot.Value_z, baseline1.Value_z, baseline2.Value_z);
+            snapshot.ValueX = predictor.PredictInt(snapshot.ValueX, baseline1.ValueX, baseline2.ValueX);
+            snapshot.ValueY = predictor.PredictInt(snapshot.ValueY, baseline1.ValueY, baseline2.ValueY);
+            snapshot.ValueZ = predictor.PredictInt(snapshot.ValueZ, baseline1.ValueZ, baseline2.ValueZ);
+            snapshot.ValueW = predictor.PredictInt(snapshot.ValueW, baseline1.ValueW, baseline2.ValueW);
         }
         [BurstCompile]
         [MonoPInvokeCallback(typeof(GhostComponentSerializer.CalculateChangeMaskDelegate))]
@@ -141,9 +143,10 @@ namespace Assembly_CSharp.Generated
             ref var snapshot = ref GhostComponentSerializer.TypeCast<Snapshot>(snapshotData);
             ref var baseline = ref GhostComponentSerializer.TypeCast<Snapshot>(baselineData);
             uint changeMask;
-            changeMask = (snapshot.Value_x != baseline.Value_x) ? 1u : 0;
-            changeMask |= (snapshot.Value_y != baseline.Value_y) ? (1u<<0) : 0;
-            changeMask |= (snapshot.Value_z != baseline.Value_z) ? (1u<<0) : 0;
+            changeMask = (snapshot.ValueX != baseline.ValueX ||
+                        snapshot.ValueY != baseline.ValueY ||
+                        snapshot.ValueZ != baseline.ValueZ ||
+                        snapshot.ValueW != baseline.ValueW) ? 1u : 0;
             GhostComponentSerializer.CopyToChangeMask(bits, changeMask, startOffset, 1);
         }
         [BurstCompile]
@@ -154,11 +157,12 @@ namespace Assembly_CSharp.Generated
             ref var baseline = ref GhostComponentSerializer.TypeCast<Snapshot>(baselineData);
             uint changeMask = GhostComponentSerializer.CopyFromChangeMask(changeMaskData, startOffset, ChangeMaskBits);
             if ((changeMask & (1 << 0)) != 0)
-                writer.WritePackedIntDelta(snapshot.Value_x, baseline.Value_x, compressionModel);
-            if ((changeMask & (1 << 0)) != 0)
-                writer.WritePackedIntDelta(snapshot.Value_y, baseline.Value_y, compressionModel);
-            if ((changeMask & (1 << 0)) != 0)
-                writer.WritePackedIntDelta(snapshot.Value_z, baseline.Value_z, compressionModel);
+            {
+                writer.WritePackedIntDelta(snapshot.ValueX, baseline.ValueX, compressionModel);
+                writer.WritePackedIntDelta(snapshot.ValueY, baseline.ValueY, compressionModel);
+                writer.WritePackedIntDelta(snapshot.ValueZ, baseline.ValueZ, compressionModel);
+                writer.WritePackedIntDelta(snapshot.ValueW, baseline.ValueW, compressionModel);
+            }
         }
         [BurstCompile]
         [MonoPInvokeCallback(typeof(GhostComponentSerializer.DeserializeDelegate))]
@@ -168,27 +172,29 @@ namespace Assembly_CSharp.Generated
             ref var baseline = ref GhostComponentSerializer.TypeCast<Snapshot>(baselineData);
             uint changeMask = GhostComponentSerializer.CopyFromChangeMask(changeMaskData, startOffset, ChangeMaskBits);
             if ((changeMask & (1 << 0)) != 0)
-                snapshot.Value_x = reader.ReadPackedIntDelta(baseline.Value_x, compressionModel);
+            {
+                snapshot.ValueX = reader.ReadPackedIntDelta(baseline.ValueX, compressionModel);
+                snapshot.ValueY = reader.ReadPackedIntDelta(baseline.ValueY, compressionModel);
+                snapshot.ValueZ = reader.ReadPackedIntDelta(baseline.ValueZ, compressionModel);
+                snapshot.ValueW = reader.ReadPackedIntDelta(baseline.ValueW, compressionModel);
+            }
             else
-                snapshot.Value_x = baseline.Value_x;
-            if ((changeMask & (1 << 0)) != 0)
-                snapshot.Value_y = reader.ReadPackedIntDelta(baseline.Value_y, compressionModel);
-            else
-                snapshot.Value_y = baseline.Value_y;
-            if ((changeMask & (1 << 0)) != 0)
-                snapshot.Value_z = reader.ReadPackedIntDelta(baseline.Value_z, compressionModel);
-            else
-                snapshot.Value_z = baseline.Value_z;
+            {
+                snapshot.ValueX = baseline.ValueX;
+                snapshot.ValueY = baseline.ValueY;
+                snapshot.ValueZ = baseline.ValueZ;
+                snapshot.ValueW = baseline.ValueW;
+            }
         }
         #if UNITY_EDITOR || DEVELOPMENT_BUILD
         [BurstCompile]
         [MonoPInvokeCallback(typeof(GhostComponentSerializer.ReportPredictionErrorsDelegate))]
         private static void ReportPredictionErrors(IntPtr componentData, IntPtr backupData, ref UnsafeList<float> errors)
         {
-            ref var component = ref GhostComponentSerializer.TypeCast<Unity.Transforms.Translation>(componentData, 0);
-            ref var backup = ref GhostComponentSerializer.TypeCast<Unity.Transforms.Translation>(backupData, 0);
+            ref var component = ref GhostComponentSerializer.TypeCast<Unity.Transforms.Rotation>(componentData, 0);
+            ref var backup = ref GhostComponentSerializer.TypeCast<Unity.Transforms.Rotation>(backupData, 0);
             int errorIndex = 0;
-            errors[errorIndex] = math.max(errors[errorIndex], math.distance(component.Value, backup.Value));
+            errors[errorIndex] = math.max(errors[errorIndex], math.distance(component.Value.value, backup.Value.value));
             ++errorIndex;
         }
         private static int GetPredictionErrorNames(ref FixedString512 names)

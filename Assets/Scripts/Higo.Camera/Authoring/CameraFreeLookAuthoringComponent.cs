@@ -74,6 +74,7 @@ namespace Higo.Camera
             DeaccelTime = 0.1f,
             MaxSpeed = 2f,
             Wrap = false,
+            Inverse = true,
         };
 
         internal float4[] cachedKnots;
