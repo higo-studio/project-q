@@ -39,7 +39,7 @@ namespace VertexFragment
                 cc.Jumped = input.Jump ? 1 : 0;
                 // cc.Looking.x = (int)(input.Looking.x * 1000_000);
                 // cc.Looking.y = (int)(input.Looking.y * 1000_000);
-                if (math.distancesq(cc.Movement.x, cc.Movement.y) > 0)
+                if (math.distance(cc.Movement.x, cc.Movement.y) > 0)
                 {
                     ccTrs.Value.rot = quaternion.LookRotation(mathEx.ProjectOnPlane(input.Forward, math.up()), math.up());
                 }
