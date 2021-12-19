@@ -1,0 +1,24 @@
+{
+    "name": "Unity.Animation.Hybrid",
+    "references": [
+        "Unity.Animation",
+        "Unity.Animation.Authoring",
+        "Unity.Animation.Graph",
+        "Unity.Collections",
+        "Unity.DataFlowGraph",
+        "Unity.Entities",
+        "Unity.Entities.Hybrid",
+        "Unity.Mathematics",
+        "Unity.Transforms",
+        "Unity.Deformations"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

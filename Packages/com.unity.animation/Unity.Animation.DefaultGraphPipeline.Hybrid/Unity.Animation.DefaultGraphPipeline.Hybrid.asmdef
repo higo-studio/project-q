@@ -1,0 +1,21 @@
+{
+    "name": "Unity.Animation.DefaultGraphPipeline.Hybrid",
+    "references": [
+        "Unity.Animation.Hybrid",
+        "Unity.Animation.Graph",
+        "Unity.Animation.Graph.Hybrid",
+        "Unity.Animation.DefaultGraphPipeline",
+        "Unity.Animation",
+        "Unity.Entities",
+        "Unity.Entities.Hybrid"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

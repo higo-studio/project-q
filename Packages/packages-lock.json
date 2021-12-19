@@ -7,6 +7,23 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.animation": {
+      "version": "file:com.unity.animation",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.mathematics": "1.2.1",
+        "com.unity.entities": "0.17.0-preview.41",
+        "com.unity.collections": "0.15.0-preview.21",
+        "com.unity.jobs": "0.8.0-preview.23",
+        "com.unity.burst": "1.4.1",
+        "com.unity.test-framework": "1.1.20",
+        "com.unity.dataflowgraph": "0.19.0-preview.7",
+        "com.unity.graphtools.foundation": "0.7.0-preview.2",
+        "com.unity.test-framework.performance": "2.3.1-preview",
+        "com.unity.modules.animation": "1.0.0"
+      }
+    },
     "com.unity.burst": {
       "version": "1.4.1",
       "depth": 1,
@@ -29,6 +46,19 @@
       "source": "registry",
       "dependencies": {
         "com.unity.test-framework.performance": "2.3.1-preview",
+        "com.unity.burst": "1.4.1"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.dataflowgraph": {
+      "version": "0.19.0-preview.7",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.entities": "0.17.0-preview.41",
+        "com.unity.jobs": "0.8.0-preview.23",
+        "com.unity.collections": "0.15.0-preview.21",
+        "com.unity.mathematics": "1.2.1",
         "com.unity.burst": "1.4.1"
       },
       "url": "https://packages.unity.com"
@@ -80,6 +110,21 @@
       "dependencies": {
         "com.unity.timeline": "1.5.2",
         "com.autodesk.fbx": "4.1.1"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.graphtools.foundation": {
+      "version": "0.7.0-preview.2",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.searcher": "4.7.0-preview",
+        "nuget.moq": "1.0.0",
+        "com.unity.properties": "1.6.0-preview",
+        "com.unity.properties.ui": "1.6.2-preview.1",
+        "com.unity.collections": "0.15.0-preview.21",
+        "com.unity.serialization": "1.6.1-preview",
+        "com.unity.ext.nunit": "1.0.6"
       },
       "url": "https://packages.unity.com"
     },
@@ -280,7 +325,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.searcher": {
-      "version": "4.2.0",
+      "version": "4.7.0-preview",
       "depth": 2,
       "source": "registry",
       "dependencies": {},
@@ -397,11 +442,27 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "nuget.castle-core": {
+      "version": "1.0.1",
+      "depth": 3,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "nuget.mono-cecil": {
       "version": "0.1.6-preview",
       "depth": 2,
       "source": "registry",
       "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "nuget.moq": {
+      "version": "1.0.0",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {
+        "nuget.castle-core": "1.0.1"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.modules.ai": {

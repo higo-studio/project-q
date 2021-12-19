@@ -1,0 +1,28 @@
+{
+    "name": "Unity.Animation.Graph",
+    "references": [
+        "Unity.Animation",
+        "Unity.Burst",
+        "Unity.Mathematics",
+        "Unity.DataFlowGraph",
+        "Unity.Entities",
+        "Unity.Transforms",
+        "Unity.Animation.Curves",
+        "Unity.Collections"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.package-validation-suite",
+            "expression": "0.0.0",
+            "define": "UNITY_SKIP_UPDATES_WITH_VALIDATION_SUITE"
+        }
+    ],
+    "noEngineReferences": false
+}
