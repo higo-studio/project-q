@@ -38,7 +38,7 @@ public class GoInGameServerSystem : SystemBase
             {
                 Value = new RigidTransform()
                 {
-                    pos = new float3(0, 5, 0),
+                    pos = new float3(0, -25, 0),
                     rot = quaternion.identity
                 }
             });

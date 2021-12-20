@@ -37,3 +37,8 @@ sysinfo.txt
 *.unitypackage
 
 Logs/
+
+Assets/SceneDependencyCache/
+Assets/SceneDependencyCache.meta
+.vscode/
+/UserSettings/

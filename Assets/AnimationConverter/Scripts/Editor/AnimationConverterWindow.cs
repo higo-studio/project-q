@@ -28,6 +28,7 @@ namespace SoxwareInteractive.AnimationConversion
         private bool convertToFoldout = true;
         private bool settingsFoldout = true;
         private bool gameObjectsFoldout = true;
+        private Vector2 scollPos;
 
         private AnimationConverter.Configuration configuration = new AnimationConverter.Configuration();
         private List<AnimationClip> clipsToConvertList = new List<AnimationClip>();
@@ -57,7 +58,7 @@ namespace SoxwareInteractive.AnimationConversion
         {
             AnimationConverterWindow window = (AnimationConverterWindow)EditorWindow.GetWindow(typeof(AnimationConverterWindow));
             window.titleContent = new GUIContent("Convert Anim");
-            window.minSize = new Vector2(250, 500);
+            window.minSize = new Vector2(100, 500);
         }
 
         //********************************************************************************
@@ -66,6 +67,7 @@ namespace SoxwareInteractive.AnimationConversion
 
         private void OnGUI()
         {
+            scollPos = GUILayout.BeginScrollView(scollPos, GUILayout.ExpandWidth(false));
             bool hasAnActiveError = false;
 
             if (h1Style == null)
@@ -118,7 +120,7 @@ namespace SoxwareInteractive.AnimationConversion
 
             GUILayout.Space(4);
 
-            DrawLine(1000, 2, 0, 0, Color.black);
+            // DrawLine(1000, 2, 0, 0, Color.black);
 
             GUILayout.Space(10);
 
@@ -584,7 +586,9 @@ namespace SoxwareInteractive.AnimationConversion
                         }
                     }
                 }
+
             }
+            GUILayout.EndScrollView();
         }
 
         private string BrowseDirectory(string title, string directory)

@@ -74,8 +74,8 @@ namespace Unity.Animation
             for (int i = 0; i < transformIndices.Length; ++i)
             {
                 int parent = parentIndices[transformIndices[i]];
-                // if (parent == -1 || !transformIndices.Contains(parent))
-                //     continue;
+                if (parent == -1 || !transformIndices.Contains(parent))
+                    continue;
 
                 bones.Add(new Bone { child = transformIndices[i], parent = parent });
             }
