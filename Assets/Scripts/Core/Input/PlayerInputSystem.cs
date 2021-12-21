@@ -18,8 +18,8 @@ public class InputSystem : ComponentSystem, InputActions.IPlayerActions
     float m_firing;
     bool m_jumped;
 
-    static bool m_cursorHide;
-    static bool CursorHide
+    bool m_cursorHide;
+    bool CursorHide
     {
         set
         {
@@ -38,6 +38,7 @@ public class InputSystem : ComponentSystem, InputActions.IPlayerActions
 
         m_actions = new InputActions();
         m_actions.Player.SetCallbacks(this);
+        CursorHide = false;
     }
 
     protected override void OnDestroy()
@@ -71,21 +72,24 @@ public class InputSystem : ComponentSystem, InputActions.IPlayerActions
         if (HasSingleton<CameraControllerComponent>())
         {
             var controller = GetSingleton<CameraControllerComponent>();
-            controller.Axis = m_looking;
+            controller.Axis = !CursorHide ? float2.zero : m_looking;
             SetSingleton(controller);
         }
 
         var input = default(PlayerInputComponent);
-        input.Movement = m_movement;
-        input.Jump = m_jumped;
-        input.Tick = World.GetExistingSystem<ClientSimulationSystemGroup>().ServerTick;
-        if (HasSingleton<CameraBrainComponent>())
+        if (CursorHide)
         {
-            var brain = GetSingleton<CameraBrainComponent>();
-            if (Entity.Null != brain.CurrentCamera)
+            input.Movement = m_movement;
+            input.Jump = m_jumped;
+            input.Tick = World.GetExistingSystem<ClientSimulationSystemGroup>().ServerTick;
+            if (HasSingleton<CameraBrainComponent>())
             {
-                var l2w = EntityManager.GetComponentData<LocalToWorld>(brain.CurrentCamera);
-                input.Forward = l2w.Forward;
+                var brain = GetSingleton<CameraBrainComponent>();
+                if (Entity.Null != brain.CurrentCamera)
+                {
+                    var l2w = EntityManager.GetComponentData<LocalToWorld>(brain.CurrentCamera);
+                    input.Forward = l2w.Forward;
+                }
             }
         }
         var inputBuffer = EntityManager.GetBuffer<PlayerInputComponent>(localInput);
