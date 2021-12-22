@@ -3,6 +3,9 @@ using Unity.Entities;
 using UnityEngine;
 using Unity.Collections;
 using Unity.Mathematics;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Higo.Camera.Editor")]
 namespace Higo.Camera
 {
     [Serializable]
@@ -44,7 +47,7 @@ namespace Higo.Camera
     }
 
     [DisallowMultipleComponent]
-    internal class CameraFreeLookAuthoringComponent : MonoBehaviour, IConvertGameObjectToEntity
+    public class CameraFreeLookAuthoringComponent : MonoBehaviour, IConvertGameObjectToEntity
     {
         public bool AutoActivate;
         public int Priority;

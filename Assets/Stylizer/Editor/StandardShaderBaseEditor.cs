@@ -37,7 +37,7 @@ public abstract class StandardShaderBaseEditor : ShaderGUI
 	protected MaterialProperty _emissionColorProperty 			= null;
 
 	// Emission
-	private ColorPickerHDRConfig _colorPickerHDRConfig = new ColorPickerHDRConfig(0f, 99f, 1/99f, 3f);
+	// private MaterialProperty _colorPickerHDRConfig = new MaterialProperty(0f, 99f, 1/99f, 3f);
 	#endregion
 
 	/* SETUP */
@@ -152,7 +152,7 @@ public abstract class StandardShaderBaseEditor : ShaderGUI
 			bool hadEmissionTexture = (_emissionMapProperty.textureValue != null);
 
 			// Texture and HDR color controls
-			materialEditor.TexturePropertyWithHDRColor(BaseContentText.emissionMapProperty, _emissionMapProperty, _emissionColorProperty, _colorPickerHDRConfig, false);
+			materialEditor.TexturePropertyWithHDRColor(BaseContentText.emissionMapProperty, _emissionMapProperty, _emissionColorProperty, false);
 
 			// If texture was assigned and color was black set color to white
 			if (_emissionMapProperty.textureValue != null && !hadEmissionTexture && brightness <= 0f)

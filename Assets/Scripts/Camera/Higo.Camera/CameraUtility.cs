@@ -118,7 +118,7 @@ namespace Higo.Camera
             }
             Gizmos.matrix = prevMatrix;
         }
-    }
 #endif
+    }
 
 }

@@ -18,10 +18,16 @@ public class StylizerRenderFeature : ScriptableRendererFeature
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {   
         stylizer = renderingData.cameraData.camera.gameObject.GetComponent<Stylizer>(); //Don't like this
+#if UNITY_EDITOR
+        if (stylizer == null)
+        {
+            stylizer = GameObject.FindObjectOfType<Camera>()?.GetComponent<Stylizer>();
+        }
+#endif
         if(stylizer!=null && stylizer.enabled){
             RenderPassEvent renderPassEvent = RenderPassEvent.AfterRendering;
             var src = renderer.cameraColorTarget;
-            stylizer = renderingData.cameraData.camera.gameObject.GetComponent<Stylizer>();
+            // stylizer = renderingData.cameraData.camera.gameObject.GetComponent<Stylizer>();
             if(stylizer.Grain_New && stylizer.Dither && !stylizer.Grain_Old && stylizer.Grain){
                 renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
             }
@@ -138,7 +144,7 @@ public class StylizerRenderFeature : ScriptableRendererFeature
 #if UNITY_EDITOR
 			var uberMaterial = stylizer.m_MaterialFactory.Get("Hidden/Post FX/Uber Shader_Grain");
 #else
-			var uberMaterial = ub;
+			var uberMaterial = stylizer.ub;
 #endif
             uberMaterial.shaderKeywords = null;
 
@@ -172,7 +178,7 @@ public class StylizerRenderFeature : ScriptableRendererFeature
 #if UNITY_EDITOR
 			var uberMaterial = stylizer.m_MaterialFactory.Get("Hidden/Post FX/Uber Shader_Grain");
 #else
-			var uberMaterial = ub;
+			var uberMaterial = stylizer.ub;
 #endif
             uberMaterial.shaderKeywords = null;
 

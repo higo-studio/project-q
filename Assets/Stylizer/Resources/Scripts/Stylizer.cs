@@ -275,11 +275,11 @@ namespace Beffio.Dithering
 		private void checkSupport()
 		{
 			//	Notify if we don't support image effects
-			if (!SystemInfo.supportsImageEffects)
-			{
-				Debug.LogError("Image effects not supported.");
-				return;
-			}
+			// if (!SystemInfo.supportsImageEffects)
+			// {
+			// 	Debug.LogError("Image effects not supported.");
+			// 	return;
+			// }
 
 			// Shader not found
 			if (!Shader)

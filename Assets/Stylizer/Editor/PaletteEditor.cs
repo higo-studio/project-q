@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UnityEngine.Networking;
 
 
 namespace Beffio.Dithering
@@ -376,12 +377,29 @@ namespace Beffio.Dithering
         /// - Will check for each pixel in the image if the color is already present in the list,
         ///   and add the color to the list if not present yet.
         /// </summary>
-        private void GenerateListFromImage()
+        private IEnumerator GenerateListFromImage()
         {
-            Texture2D colorTexture = SelectAndLoadTexture();
+            string path = EditorUtility.OpenFilePanel(ContentText.selectImageDialogText, _loadPath, "png");
+            if (path == "")
+            {
+                yield break;
+            }
+
+            _loadPath = Path.GetDirectoryName(path);
+
+            if (path.Length == 0)
+            {
+                yield break;
+            }
+
+            var colorTexture = new Texture2D(4, 4, TextureFormat.ARGB32, false);
+            colorTexture.name = Path.GetFileNameWithoutExtension(path);
+            var www = UnityWebRequestTexture.GetTexture("file://" + path);
+            yield return www.SendWebRequest();
+            colorTexture.LoadImage(www.downloadHandler.data, markNonReadable: false);
 
             if (colorTexture == null)
-                return;
+                yield break;
 
             // Remove all previous colors
             CurrentPalette.Colors.Clear();
@@ -407,7 +425,7 @@ namespace Beffio.Dithering
 
                             if (!proceed)
                             {
-                                return;
+                                yield break;
                             }
                         }
                     }
@@ -789,26 +807,5 @@ namespace Beffio.Dithering
 
         }
         #endregion
-
-        /* LOADING AND SAVING */
-        #region Loading and Saving
-
-        /// <summary>
-        ///  Opens a file dialog and loads a .png image to a Texture2D.
-        /// </summary>
-        private Texture2D SelectAndLoadTexture()
-        {
-            string path = EditorUtility.OpenFilePanel(ContentText.selectImageDialogText, _loadPath, "png");
-            if (path == "")
-            {
-                return null;
-            }
-
-            _loadPath = Path.GetDirectoryName(path);
-
-            return BeffioDitherEditorUtilities.LoadTexture(path);
-        }
-        #endregion
-
     }
 }

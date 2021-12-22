@@ -736,7 +736,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data1d: 0
-  data2d: {x: 0, y: 0}
+  data2d:
+    x: 0
+    y: 0
 --- !u!4 &625558179
 Transform:
   m_ObjectHideFlags: 0

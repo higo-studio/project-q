@@ -18,7 +18,6 @@ namespace Unity.NetCode
             var commandBuffer = m_Barrier.CreateCommandBuffer();
             FixedString64 worldName = World.Name;
 
-            FixedString4096 s = new FixedString4096();
             Entities/* .WithAll<NetworkStreamDisconnected>() */.ForEach((Entity entity, in NetworkStreamConnection con, in NetworkStreamDisconnected disconnected) =>
             {
                 UnityEngine.Debug.LogError(

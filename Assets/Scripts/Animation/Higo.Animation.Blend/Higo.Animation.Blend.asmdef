@@ -1,0 +1,24 @@
+{
+    "name": "Higo.Animation.Blend",
+    "references": [
+        "GUID:49f8af64274d04f318e9547deb9c498b",
+        "GUID:3d581b522efa5ba499d64762a189f84c",
+        "GUID:f27abae583f311a46911c11868a490c3",
+        "GUID:2665a8d13d1b3f18800f46e256720795",
+        "GUID:fc0f4f4008c73fe4fa2fb043629c96bb",
+        "GUID:734d92eba21c94caba915361bd5ac177",
+        "GUID:cb406e48efc9c46d9a3d4911ffbdecd7",
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:8819f35a0fc84499b990e90a4ca1911f",
+        "GUID:baddc4b7b67188c4cacae2ee9fb2d242"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -3,6 +3,7 @@ using Unity.Entities;
 using Unity.NetCode;
 using Unity.Networking.Transport;
 using Unity.Burst;
+using PlayType = Unity.NetCode.ClientServerBootstrap.PlayType;
 
 
 [UpdateInWorld(UpdateInWorld.TargetWorld.Default)]
@@ -32,6 +33,7 @@ public class Game : SystemBase
     {
         // Destroy singleton to prevent system from running again
         EntityManager.DestroyEntity(GetSingletonEntity<InitGameComponent>());
+        var playType = ClientServerBootstrap.RequestedPlayType;
         foreach (var world in World.All)
         {
             var network = world.GetExistingSystem<NetworkStreamReceiveSystem>();
@@ -39,8 +41,12 @@ public class Game : SystemBase
             {
                 SetupTickRate(world);
 #if UNITY_EDITOR
-                var ep = NetworkEndPoint.Parse(ClientServerBootstrap.RequestedAutoConnect, 7979);
-                network.Connect(ep);
+                if (playType == PlayType.ClientAndServer
+                    || (playType == PlayType.Client && !string.IsNullOrWhiteSpace(ClientServerBootstrap.RequestedAutoConnect)))
+                {
+                    var ep = NetworkEndPoint.Parse(ClientServerBootstrap.RequestedAutoConnect, 7979);
+                    network.Connect(ep);
+                }
 #endif
             }
 #if UNITY_EDITOR || UNITY_SERVER
