@@ -17,7 +17,6 @@ public class GoInGameClientSystem : SystemBase
         var commandBuffer = new EntityCommandBuffer(Allocator.Temp);
         Entities.WithNone<NetworkStreamInGame>().ForEach((Entity ent, in NetworkIdComponent id) =>
         {
-            UnityEngine.Debug.LogError(string.Format("GoInGameClientSystem: {0}", id.Value));
             commandBuffer.AddComponent<NetworkStreamInGame>(ent);
             var req = commandBuffer.CreateEntity();
             commandBuffer.AddComponent<GoInGameRequest>(req);

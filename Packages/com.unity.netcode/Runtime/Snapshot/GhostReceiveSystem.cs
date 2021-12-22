@@ -879,7 +879,6 @@ namespace Unity.NetCode
             {
                 var ghost = ghosts[i].ghost;
                 var ent = ghosts[i].entity;
-                UnityEngine.Debug.LogError(string.Format("add World({1}): {0}", ent, World.Name));
                 if (!m_ghostEntityMap.TryAdd(ghost.ghostId, ent))
                 {
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
