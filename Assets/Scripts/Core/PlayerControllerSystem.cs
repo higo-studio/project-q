@@ -34,14 +34,21 @@ namespace VertexFragment
                     return;
                 inputBuffer.GetDataAtTick(tick, out var input);
 
-                cc.Movement = math.normalizesafe(input.Movement);
+                cc.Movement = float2.zero.Equals(input.Movement) ? float2.zero : new float2(0, 1);
                 cc.MovementSpeed = 10f;
                 cc.Jumped = input.Jump ? 1 : 0;
                 // cc.Looking.x = (int)(input.Looking.x * 1000_000);
                 // cc.Looking.y = (int)(input.Looking.y * 1000_000);
-                if (math.distance(cc.Movement.x, cc.Movement.y) > 0)
+                if (math.length(cc.Movement) > 0)
                 {
-                    ccTrs.Value.rot = quaternion.LookRotation(mathEx.ProjectOnPlane(input.Forward, math.up()), math.up());
+                    // Follow Movement
+                    ccTrs.Value.rot =
+                        math.mul(
+                            quaternion.LookRotation(mathEx.ProjectOnPlane(input.CameraForward, math.up()), math.up())
+                            , quaternion.LookRotation(math.normalizesafe(new float3(input.Movement.x, 0, input.Movement.y)), math.up())
+                        );
+                    // Follow Camera Forward
+                    // ccTrs.Value.rot = quaternion.LookRotation(mathEx.ProjectOnPlane(input.CameraForward, math.up()), math.up());
                 }
             }).ScheduleParallel();
         }

@@ -17,9 +17,9 @@ namespace Higo.Core.Generated
         {
             writer.WriteFloat(data.Movement.x);
             writer.WriteFloat(data.Movement.y);
-            writer.WriteFloat(data.Forward.x);
-            writer.WriteFloat(data.Forward.y);
-            writer.WriteFloat(data.Forward.z);
+            writer.WriteFloat(data.CameraForward.x);
+            writer.WriteFloat(data.CameraForward.y);
+            writer.WriteFloat(data.CameraForward.z);
             writer.WriteUInt(data.Jump ? 1u : 0);
             writer.WriteUInt(data.Shift ? 1u : 0);
         }
@@ -28,9 +28,9 @@ namespace Higo.Core.Generated
         {
             data.Movement.x = reader.ReadFloat();
             data.Movement.y = reader.ReadFloat();
-            data.Forward.x = reader.ReadFloat();
-            data.Forward.y = reader.ReadFloat();
-            data.Forward.z = reader.ReadFloat();
+            data.CameraForward.x = reader.ReadFloat();
+            data.CameraForward.y = reader.ReadFloat();
+            data.CameraForward.z = reader.ReadFloat();
             data.Jump = (reader.ReadUInt() != 0) ? true : false;
             data.Shift = (reader.ReadUInt() != 0) ? true : false;
         }
@@ -39,9 +39,9 @@ namespace Higo.Core.Generated
         {
             writer.WritePackedFloatDelta(data.Movement.x, baseline.Movement.x, compressionModel);
             writer.WritePackedFloatDelta(data.Movement.y, baseline.Movement.y, compressionModel);
-            writer.WritePackedFloatDelta(data.Forward.x, baseline.Forward.x, compressionModel);
-            writer.WritePackedFloatDelta(data.Forward.y, baseline.Forward.y, compressionModel);
-            writer.WritePackedFloatDelta(data.Forward.z, baseline.Forward.z, compressionModel);
+            writer.WritePackedFloatDelta(data.CameraForward.x, baseline.CameraForward.x, compressionModel);
+            writer.WritePackedFloatDelta(data.CameraForward.y, baseline.CameraForward.y, compressionModel);
+            writer.WritePackedFloatDelta(data.CameraForward.z, baseline.CameraForward.z, compressionModel);
             writer.WritePackedUInt(data.Jump ? 1u : 0, compressionModel);
             writer.WritePackedUInt(data.Shift ? 1u : 0, compressionModel);
         }
@@ -50,9 +50,9 @@ namespace Higo.Core.Generated
         {
             data.Movement.x = reader.ReadPackedFloatDelta(baseline.Movement.x, compressionModel);
             data.Movement.y = reader.ReadPackedFloatDelta(baseline.Movement.y, compressionModel);
-            data.Forward.x = reader.ReadPackedFloatDelta(baseline.Forward.x, compressionModel);
-            data.Forward.y = reader.ReadPackedFloatDelta(baseline.Forward.y, compressionModel);
-            data.Forward.z = reader.ReadPackedFloatDelta(baseline.Forward.z, compressionModel);
+            data.CameraForward.x = reader.ReadPackedFloatDelta(baseline.CameraForward.x, compressionModel);
+            data.CameraForward.y = reader.ReadPackedFloatDelta(baseline.CameraForward.y, compressionModel);
+            data.CameraForward.z = reader.ReadPackedFloatDelta(baseline.CameraForward.z, compressionModel);
             data.Jump = (reader.ReadPackedUInt(compressionModel) != 0) ? true : false;
             data.Shift = (reader.ReadPackedUInt(compressionModel) != 0) ? true : false;
         }

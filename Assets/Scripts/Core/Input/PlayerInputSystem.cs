@@ -88,7 +88,7 @@ public class InputSystem : ComponentSystem, InputActions.IPlayerActions
                 if (Entity.Null != brain.CurrentCamera)
                 {
                     var l2w = EntityManager.GetComponentData<LocalToWorld>(brain.CurrentCamera);
-                    input.Forward = l2w.Forward;
+                    input.CameraForward = l2w.Forward;
                 }
             }
         }
