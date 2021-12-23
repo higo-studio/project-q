@@ -15,6 +15,8 @@ namespace Higo.Core.Generated
     {
         public void Serialize(ref DataStreamWriter writer, in PlayerInputComponent data)
         {
+            writer.WriteFloat(data.MovementRaw.x);
+            writer.WriteFloat(data.MovementRaw.y);
             writer.WriteFloat(data.Movement.x);
             writer.WriteFloat(data.Movement.y);
             writer.WriteFloat(data.CameraForward.x);
@@ -26,6 +28,8 @@ namespace Higo.Core.Generated
 
         public void Deserialize(ref DataStreamReader reader, ref PlayerInputComponent data)
         {
+            data.MovementRaw.x = reader.ReadFloat();
+            data.MovementRaw.y = reader.ReadFloat();
             data.Movement.x = reader.ReadFloat();
             data.Movement.y = reader.ReadFloat();
             data.CameraForward.x = reader.ReadFloat();
@@ -37,6 +41,8 @@ namespace Higo.Core.Generated
 
         public void Serialize(ref DataStreamWriter writer, in PlayerInputComponent data, in PlayerInputComponent baseline, NetworkCompressionModel compressionModel)
         {
+            writer.WritePackedFloatDelta(data.MovementRaw.x, baseline.MovementRaw.x, compressionModel);
+            writer.WritePackedFloatDelta(data.MovementRaw.y, baseline.MovementRaw.y, compressionModel);
             writer.WritePackedFloatDelta(data.Movement.x, baseline.Movement.x, compressionModel);
             writer.WritePackedFloatDelta(data.Movement.y, baseline.Movement.y, compressionModel);
             writer.WritePackedFloatDelta(data.CameraForward.x, baseline.CameraForward.x, compressionModel);
@@ -48,6 +54,8 @@ namespace Higo.Core.Generated
 
         public void Deserialize(ref DataStreamReader reader, ref PlayerInputComponent data, in PlayerInputComponent baseline, NetworkCompressionModel compressionModel)
         {
+            data.MovementRaw.x = reader.ReadPackedFloatDelta(baseline.MovementRaw.x, compressionModel);
+            data.MovementRaw.y = reader.ReadPackedFloatDelta(baseline.MovementRaw.y, compressionModel);
             data.Movement.x = reader.ReadPackedFloatDelta(baseline.Movement.x, compressionModel);
             data.Movement.y = reader.ReadPackedFloatDelta(baseline.Movement.y, compressionModel);
             data.CameraForward.x = reader.ReadPackedFloatDelta(baseline.CameraForward.x, compressionModel);

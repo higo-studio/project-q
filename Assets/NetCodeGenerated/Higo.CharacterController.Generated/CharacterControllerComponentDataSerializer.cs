@@ -23,7 +23,7 @@ namespace Higo.CharacterController.Generated
             {
                 s_State = new GhostComponentSerializer.State
                 {
-                    GhostFieldsHash = 10278782975620710441,
+                    GhostFieldsHash = 11223936245589747858,
                     ExcludeFromComponentCollectionHash = 0,
                     ComponentType = ComponentType.ReadWrite<CharacterControllerComponentData>(),
                     ComponentSize = UnsafeUtility.SizeOf<CharacterControllerComponentData>(),
@@ -66,8 +66,9 @@ namespace Higo.CharacterController.Generated
             public int Looking_x;
             public int Looking_y;
             public int Jumped;
+            public float MovementSpeed;
         }
-        public const int ChangeMaskBits = 4;
+        public const int ChangeMaskBits = 5;
         [BurstCompile]
         [MonoPInvokeCallback(typeof(GhostComponentSerializer.CopyToFromSnapshotDelegate))]
         private static void CopyToSnapshot(IntPtr stateData, IntPtr snapshotData, int snapshotOffset, int snapshotStride, IntPtr componentData, int componentStride, int count)
@@ -82,6 +83,7 @@ namespace Higo.CharacterController.Generated
                 snapshot.Looking_x = (int) component.Looking.x;
                 snapshot.Looking_y = (int) component.Looking.y;
                 snapshot.Jumped = (int) component.Jumped;
+                snapshot.MovementSpeed = component.MovementSpeed;
             }
         }
         [BurstCompile]
@@ -111,6 +113,7 @@ namespace Higo.CharacterController.Generated
                 component.Looking.x = (int) snapshotBefore.Looking_x;
                 component.Looking.y = (int) snapshotBefore.Looking_y;
                 component.Jumped = (int) snapshotBefore.Jumped;
+                component.MovementSpeed = snapshotBefore.MovementSpeed;
 
             }
         }
@@ -127,6 +130,7 @@ namespace Higo.CharacterController.Generated
             component.Looking.x = backup.Looking.x;
             component.Looking.y = backup.Looking.y;
             component.Jumped = backup.Jumped;
+            component.MovementSpeed = backup.MovementSpeed;
         }
 
         [BurstCompile]
@@ -152,7 +156,8 @@ namespace Higo.CharacterController.Generated
             changeMask |= (snapshot.Looking_x != baseline.Looking_x) ? (1u<<1) : 0;
             changeMask |= (snapshot.Looking_y != baseline.Looking_y) ? (1u<<2) : 0;
             changeMask |= (snapshot.Jumped != baseline.Jumped) ? (1u<<3) : 0;
-            GhostComponentSerializer.CopyToChangeMask(bits, changeMask, startOffset, 4);
+            changeMask |= (snapshot.MovementSpeed != baseline.MovementSpeed) ? (1u<<4) : 0;
+            GhostComponentSerializer.CopyToChangeMask(bits, changeMask, startOffset, 5);
         }
         [BurstCompile]
         [MonoPInvokeCallback(typeof(GhostComponentSerializer.SerializeDelegate))]
@@ -171,6 +176,8 @@ namespace Higo.CharacterController.Generated
                 writer.WritePackedIntDelta(snapshot.Looking_y, baseline.Looking_y, compressionModel);
             if ((changeMask & (1 << 3)) != 0)
                 writer.WritePackedIntDelta(snapshot.Jumped, baseline.Jumped, compressionModel);
+            if ((changeMask & (1 << 4)) != 0)
+                writer.WritePackedFloatDelta(snapshot.MovementSpeed, baseline.MovementSpeed, compressionModel);
         }
         [BurstCompile]
         [MonoPInvokeCallback(typeof(GhostComponentSerializer.DeserializeDelegate))]
@@ -199,6 +206,10 @@ namespace Higo.CharacterController.Generated
                 snapshot.Jumped = reader.ReadPackedIntDelta(baseline.Jumped, compressionModel);
             else
                 snapshot.Jumped = baseline.Jumped;
+            if ((changeMask & (1 << 4)) != 0)
+                snapshot.MovementSpeed = reader.ReadPackedFloatDelta(baseline.MovementSpeed, compressionModel);
+            else
+                snapshot.MovementSpeed = baseline.MovementSpeed;
         }
         #if UNITY_EDITOR || DEVELOPMENT_BUILD
         [BurstCompile]
@@ -215,6 +226,8 @@ namespace Higo.CharacterController.Generated
             errors[errorIndex] = math.max(errors[errorIndex], math.abs(component.Looking.y - backup.Looking.y));
             ++errorIndex;
             errors[errorIndex] = math.max(errors[errorIndex], math.abs(component.Jumped - backup.Jumped));
+            ++errorIndex;
+            errors[errorIndex] = math.max(errors[errorIndex], math.abs(component.MovementSpeed - backup.MovementSpeed));
             ++errorIndex;
         }
         private static int GetPredictionErrorNames(ref FixedString512 names)
@@ -235,6 +248,10 @@ namespace Higo.CharacterController.Generated
             if (nameCount != 0)
                 names.Append(new FixedString32(","));
             names.Append(new FixedString64("Jumped"));
+            ++nameCount;
+            if (nameCount != 0)
+                names.Append(new FixedString32(","));
+            names.Append(new FixedString64("MovementSpeed"));
             ++nameCount;
             return nameCount;
         }

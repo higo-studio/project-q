@@ -38,7 +38,7 @@ namespace VertexFragment
                 cc.Movement = movement;
                 cc.MovementSpeed = 10f * math.length(input.Movement);
                 cc.Jumped = input.Jump ? 1 : 0;
-                if (math.length(cc.Movement) > 0)
+                if (math.length(input.MovementRaw) > 0)
                 {
                     // Follow Movement
                     ccTrs.Value.rot =

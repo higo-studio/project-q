@@ -99,9 +99,11 @@ public class InputSystem : ComponentSystem, InputActions.IPlayerActions
         currentMovement = mathEx.SmoothDamp(currentMovement, m_movement, ref movementCurrentVelocity, 0.1f, Time.DeltaTime);
         if (math.EPSILON > math.abs(currentMovement.x)) currentMovement.x = 0;
         if (math.EPSILON > math.abs(currentMovement.y)) currentMovement.y = 0;
-        input.Movement = mathEx.LimitPrecision(currentMovement, 1000f);
+        input.Movement = currentMovement;
+        input.MovementRaw = m_movement;
         input.Jump = m_jumped;
         input.Tick = World.GetExistingSystem<ClientSimulationSystemGroup>().ServerTick;
+
         if (HasSingleton<CameraBrainComponent>())
         {
             var brain = GetSingleton<CameraBrainComponent>();

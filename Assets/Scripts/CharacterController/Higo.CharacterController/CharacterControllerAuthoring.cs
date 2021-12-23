@@ -15,7 +15,6 @@ using Math = Unity.Physics.Math;
 public struct CharacterControllerComponentData : IComponentData
 {
     public float3 Gravity;
-    public float MovementSpeed;
     public float MaxMovementSpeed;
     public float RotationSpeed;
     public float JumpUpwardsSpeed;
@@ -35,6 +34,9 @@ public struct CharacterControllerComponentData : IComponentData
     public int2 Looking;
     [GhostField]
     public int Jumped;
+    [GhostField]
+    public float MovementSpeed;
+
 }
 
 [WriteGroup(typeof(PhysicsGraphicalInterpolationBuffer))]
