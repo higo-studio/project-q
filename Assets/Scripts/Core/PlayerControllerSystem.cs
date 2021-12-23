@@ -34,11 +34,10 @@ namespace VertexFragment
                     return;
                 inputBuffer.GetDataAtTick(tick, out var input);
 
-                cc.Movement = float2.zero.Equals(input.Movement) ? float2.zero : new float2(0, 1);
-                cc.MovementSpeed = 10f;
+                var movement = float2.zero.Equals(input.Movement) ? float2.zero : new float2(0, 1);
+                cc.Movement = movement;
+                cc.MovementSpeed = 10f * math.length(input.Movement);
                 cc.Jumped = input.Jump ? 1 : 0;
-                // cc.Looking.x = (int)(input.Looking.x * 1000_000);
-                // cc.Looking.y = (int)(input.Looking.y * 1000_000);
                 if (math.length(cc.Movement) > 0)
                 {
                     // Follow Movement
@@ -47,30 +46,8 @@ namespace VertexFragment
                             quaternion.LookRotation(mathEx.ProjectOnPlane(input.CameraForward, math.up()), math.up())
                             , quaternion.LookRotation(math.normalizesafe(new float3(input.Movement.x, 0, input.Movement.y)), math.up())
                         );
-                    // Follow Camera Forward
-                    // ccTrs.Value.rot = quaternion.LookRotation(mathEx.ProjectOnPlane(input.CameraForward, math.up()), math.up());
                 }
             }).ScheduleParallel();
         }
     }
-
-    // [UpdateInGroup(typeof(GhostPredictionSystemGroup))]
-    // [UpdateInWorld(UpdateInWorld.TargetWorld.Client)]
-    // public class DebugClientDeltaTime : SystemBase
-    // {
-    //     protected override void OnUpdate()
-    //     {
-    //        Debug.Log("Client: " + Time.DeltaTime);
-    //     }
-    // }
-
-    // [UpdateInGroup(typeof(GhostPredictionSystemGroup))]
-    // [UpdateInWorld(UpdateInWorld.TargetWorld.Server)]
-    // public class DebugServerDeltaTime : SystemBase
-    // {
-    //     protected override void OnUpdate()
-    //     {
-    //        Debug.Log("Server: " + Time.DeltaTime);
-    //     }
-    // }
 }

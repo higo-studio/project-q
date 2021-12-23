@@ -26,10 +26,29 @@ public class InputSystem : ComponentSystem, InputActions.IPlayerActions
             Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.None;
             Cursor.visible = !value;
             m_cursorHide = value;
+
+            var p = m_actions.Player;
+            if (value)
+            {
+                p.Look.Enable();
+                p.Move.Enable();
+                p.Fire.Enable();
+                p.Jump.Enable();
+            }
+            else
+            {
+                p.Look.Disable();
+                p.Move.Disable();
+                p.Fire.Disable();
+                p.Jump.Disable();
+            }
         }
 
         get => m_cursorHide;
     }
+
+    float2 currentMovement;
+    float2 movementCurrentVelocity;
 
 
     protected override void OnCreate()
@@ -77,19 +96,19 @@ public class InputSystem : ComponentSystem, InputActions.IPlayerActions
         }
 
         var input = default(PlayerInputComponent);
-        if (CursorHide)
+        currentMovement = mathEx.SmoothDamp(currentMovement, m_movement, ref movementCurrentVelocity, 0.1f, Time.DeltaTime);
+        if (math.EPSILON > math.abs(currentMovement.x)) currentMovement.x = 0;
+        if (math.EPSILON > math.abs(currentMovement.y)) currentMovement.y = 0;
+        input.Movement = mathEx.LimitPrecision(currentMovement, 1000f);
+        input.Jump = m_jumped;
+        input.Tick = World.GetExistingSystem<ClientSimulationSystemGroup>().ServerTick;
+        if (HasSingleton<CameraBrainComponent>())
         {
-            input.Movement = m_movement;
-            input.Jump = m_jumped;
-            input.Tick = World.GetExistingSystem<ClientSimulationSystemGroup>().ServerTick;
-            if (HasSingleton<CameraBrainComponent>())
+            var brain = GetSingleton<CameraBrainComponent>();
+            if (Entity.Null != brain.CurrentCamera)
             {
-                var brain = GetSingleton<CameraBrainComponent>();
-                if (Entity.Null != brain.CurrentCamera)
-                {
-                    var l2w = EntityManager.GetComponentData<LocalToWorld>(brain.CurrentCamera);
-                    input.CameraForward = l2w.Forward;
-                }
+                var l2w = EntityManager.GetComponentData<LocalToWorld>(brain.CurrentCamera);
+                input.CameraForward = l2w.Forward;
             }
         }
         var inputBuffer = EntityManager.GetBuffer<PlayerInputComponent>(localInput);
