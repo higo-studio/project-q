@@ -207,6 +207,7 @@ public class CharacterControllerStepSystem : SystemBase
             // Movement and jumping
             bool shouldJump = false;
             float3 requestedMovementDirection = float3.zero;
+            var requestedMovementMag = 1f;
             {
                 float3 forward = math.forward(quaternion.identity);
                 float3 right = math.cross(up, forward);
@@ -220,6 +221,7 @@ public class CharacterControllerStepSystem : SystemBase
                     float3 localSpaceMovement = forward * vertical + right * horizontal;
                     float3 worldSpaceMovement = math.rotate(trs.rot, localSpaceMovement);
                     requestedMovementDirection = math.normalize(worldSpaceMovement);
+                    requestedMovementMag = math.length(localSpaceMovement);
                 }
                 shouldJump = jumpRequested && ccInternalData.SupportedState != CharacterSupportState.Unsupported;
             }
@@ -250,7 +252,7 @@ public class CharacterControllerStepSystem : SystemBase
                     ccInternalData.UnsupportedVelocity += ccComponentData.Gravity * DeltaTime;
                 }
                 // If unsupported then keep jump and surface momentum
-                linearVelocity = requestedMovementDirection * ccComponentData.MovementSpeed +
+                linearVelocity = requestedMovementDirection * ccComponentData.MovementSpeed * requestedMovementMag +
                     (ccInternalData.SupportedState != CharacterSupportState.Supported ? ccInternalData.UnsupportedVelocity : float3.zero);
             }
         }

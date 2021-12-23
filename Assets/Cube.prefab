@@ -281,8 +281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 593696a620d42854694e00c290fbecad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpeedPlus: 0
   MaxBlood: 0
+  RenderPrefab: {fileID: 3210868579716262020, guid: a852bba40b70532439229802a95a58be, type: 3}
 --- !u!114 &3168096583819580609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,7 +314,7 @@ MonoBehaviour:
   MovementSpeed: 8
   MaxMovementSpeed: 10
   RotationSpeed: 2.5
-  JumpUpwardsSpeed: 7
+  JumpUpwardsSpeed: 5
   MaxSlope: 60
   MaxIterations: 10
   CharacterMass: 1

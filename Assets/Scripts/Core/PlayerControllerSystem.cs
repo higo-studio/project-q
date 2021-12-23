@@ -27,6 +27,7 @@ namespace VertexFragment
                 DynamicBuffer<PlayerInputComponent> inputBuffer,
                 ref CharacterControllerComponentData cc,
                 ref CharacterControllerTransform ccTrs,
+                in CharacterControllerInternalData ccInter,
                 in PredictedGhostComponent prediction,
                 in CharacterComponent character) =>
             {
@@ -35,8 +36,7 @@ namespace VertexFragment
                 inputBuffer.GetDataAtTick(tick, out var input);
 
                 var movement = float2.zero.Equals(input.Movement) ? float2.zero : new float2(0, 1);
-                cc.Movement = movement;
-                cc.MovementSpeed = 10f * math.length(input.Movement);
+                cc.Movement = movement * math.length(input.Movement);
                 cc.Jumped = input.Jump ? 1 : 0;
                 if (math.length(input.MovementRaw) > 0)
                 {
