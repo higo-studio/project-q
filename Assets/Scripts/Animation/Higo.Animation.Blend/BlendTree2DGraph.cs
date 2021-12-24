@@ -6,8 +6,10 @@ using Unity.Animation.Hybrid;
 
 #if UNITY_EDITOR
 using UnityEditor.Animations;
+#endif
 namespace Higo.Animation
 {
+#if UNITY_EDITOR
     public static class BlendTree2DGraph
     {
         public static void AddGraphSetupComponent(BlendTree BlendTree, Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)

@@ -5,9 +5,12 @@ using UnityEngine;
 
 #if UNITY_EDITOR
 using Unity.Animation.Hybrid;
+#endif
+
 
 namespace Higo.Animation
 {
+#if UNITY_EDITOR
     [ConverterVersion("MyFirstClip_ClipPlayer", 1)]
     public class MyFirstClip_ClipPlayer : MonoBehaviour, IConvertGameObjectToEntity
     {
