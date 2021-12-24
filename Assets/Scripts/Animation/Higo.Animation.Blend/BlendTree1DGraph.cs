@@ -31,7 +31,7 @@ namespace Higo.Animation
             dstManager.AddComponent<DeltaTime>(entity);
         }
     }
-#endif
+#endif 
 
     public struct BlendTree1DSetup : ISampleSetup
     {

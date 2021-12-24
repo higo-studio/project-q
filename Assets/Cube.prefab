@@ -55,8 +55,8 @@ MonoBehaviour:
     Height: 2.5
     Radius: 6
   BottomRig:
-    Height: 0.4
-    Radius: 4
+    Height: -0.62
+    Radius: 2
   XAxis:
     Value: 0.5
     MinValue: -180
@@ -73,7 +73,7 @@ MonoBehaviour:
     MaxValue: 1
     AccelTime: 0.2
     DeaccelTime: 0.1
-    MaxSpeed: 2
+    MaxSpeed: 4
     CurrentSpeed: 0
     Wrap: 0
     Inverse: 1
@@ -131,7 +131,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5177885258673226679}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -282,7 +282,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxBlood: 0
-  RenderPrefab: {fileID: 3210868579716262020, guid: a852bba40b70532439229802a95a58be, type: 3}
+  RenderPrefab: {fileID: 3210868579716262020, guid: 3a812b522d8a9c249a21e29f8df4449a, type: 3}
 --- !u!114 &3168096583819580609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,7 +311,7 @@ MonoBehaviour:
     x: -0
     y: -9.81
     z: -0
-  MovementSpeed: 8
+  MovementSpeed: 3
   MaxMovementSpeed: 10
   RotationSpeed: 2.5
   JumpUpwardsSpeed: 5
@@ -336,7 +336,7 @@ MonoBehaviour:
   m_ShapeType: 1
   m_PrimitiveCenter:
     x: 0
-    y: 0
+    y: 1
     z: 0
   m_PrimitiveSize:
     x: 1
@@ -481,7 +481,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2811391705997912625
 Transform:
   m_ObjectHideFlags: 0
@@ -490,7 +490,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7899187894894917688}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.54, z: 0.504}
+  m_LocalPosition: {x: 0, y: 0, z: 0.504}
   m_LocalScale: {x: 0.5, y: 0.2, z: 0.2}
   m_Children: []
   m_Father: {fileID: 5177885258673226676}
