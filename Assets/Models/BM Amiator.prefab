@@ -81,7 +81,7 @@ MonoBehaviour:
   - {fileID: 7330772139839573209}
   - {fileID: 3319445688315408897}
   - {fileID: 5475978528254780711}
---- !u!114 &8426735474950531745
+--- !u!114 &3637928890789149073
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,27 +93,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d9a1d606fcc64d209fc46a66d767868, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layers:
+  Layers:
   - name: 
-    states:
-    - Type: 0
-      Motion: {fileID: 0}
-      Tree: {fileID: 0}
-      Speed: 0
-    - Type: 0
-      Motion: {fileID: 0}
-      Tree: {fileID: 0}
-      Speed: 0
+    states: []
   - name: 
-    states:
-    - Type: 0
-      Motion: {fileID: 0}
-      Tree: {fileID: 0}
-      Speed: 0
-    - Type: 0
-      Motion: {fileID: 0}
-      Tree: {fileID: 0}
-      Speed: 0
+    states: []
 --- !u!1001 &2327835612565886421
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -171,7 +155,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 5f967224ad167754c817587d3d81d734, type: 2}
     - target: {fileID: 919132149155446097, guid: 350bd1f380213c9408cd947db49e27e4, type: 3}
       propertyPath: m_Name
-      value: BMod Variant 1
+      value: BM Amiator
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5866666021909216657, guid: 350bd1f380213c9408cd947db49e27e4, type: 3}

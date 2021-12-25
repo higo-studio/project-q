@@ -1,0 +1,15 @@
+{
+    "name": "Higo.Animation.Controller.Editor",
+    "references": [
+        "GUID:1964b8c0ff7e547afb1f45df94ecd10f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
