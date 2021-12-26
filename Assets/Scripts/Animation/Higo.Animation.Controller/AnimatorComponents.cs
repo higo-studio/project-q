@@ -1,5 +1,8 @@
 using Unity.Entities;
 using Unity.Animation;
+using Unity.Animation.Hybrid;
+using Unity.DataFlowGraph;
+using Higo.Animation;
 
 namespace Higo.Animation.Controller
 {
@@ -24,8 +27,11 @@ namespace Higo.Animation.Controller
         public int StateCount;
     }
 
-    public struct AnimationControllerData : ISystemStateComponentData
+    public struct AnimationControllerSystemStateData : ISystemStateComponentData
     {
-
+        public NodeHandle<ConvertDeltaTimeToFloatNode> DeltaTimeNode;
+        public NodeHandle<TimeCounterNode> TimeCounterNode;
+        public NodeHandle<TimeLoopNode> TimeLoopNode;
+        public NodeHandle<FloatRcpNode> FloatRcpNode;
     }
 }

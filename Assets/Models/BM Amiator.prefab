@@ -1,123 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-550221905675636932
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3210868579716262020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9aea18a9fecfd504ba1a9c0f8ebcb60a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Version: 1
-  Bones:
-  - {fileID: 6628006884738660600}
-  - {fileID: 6236932233965326570}
-  - {fileID: 752640013114577410}
-  - {fileID: 2010993515481899067}
-  - {fileID: 5097330601202799798}
-  - {fileID: 3125013412838807077}
-  - {fileID: 3592271447136626183}
-  - {fileID: 418859842977754906}
-  - {fileID: 5209601721158307153}
-  - {fileID: 6061709610411799406}
-  - {fileID: 1430550442692690474}
-  - {fileID: 3855807056088702476}
-  - {fileID: 5670488161767089098}
-  - {fileID: 7526592938648761593}
-  - {fileID: 5098279737061633308}
-  - {fileID: 6768296708354752332}
-  - {fileID: 3509689537137456684}
-  - {fileID: 7330772139839573209}
-  - {fileID: 3319445688315408897}
-  - {fileID: 5475978528254780711}
-  m_ExcludeBones: []
-  m_InvalidBones: []
-  m_SkeletonRootBone: {fileID: 6628006884738660600}
-  TranslationChannels: []
-  RotationChannels: []
-  ScaleChannels: []
-  FloatChannels: []
-  IntChannels: []
---- !u!114 &1420532749784180655
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3210868579716262020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d52c1de4f76b1545946555cfe16e162, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RenderBones: 1
-  BoneShape: 0
-  Color: {r: 0.9528302, g: 0.25768355, b: 0.34535253, a: 1}
-  Size: 1
-  BoneMaterial: {fileID: 0}
-  RigComponent: {fileID: 0}
-  Transforms:
-  - {fileID: 6628006884738660600}
-  - {fileID: 6236932233965326570}
-  - {fileID: 752640013114577410}
-  - {fileID: 2010993515481899067}
-  - {fileID: 5097330601202799798}
-  - {fileID: 3125013412838807077}
-  - {fileID: 3592271447136626183}
-  - {fileID: 418859842977754906}
-  - {fileID: 5209601721158307153}
-  - {fileID: 6061709610411799406}
-  - {fileID: 1430550442692690474}
-  - {fileID: 3855807056088702476}
-  - {fileID: 5670488161767089098}
-  - {fileID: 7526592938648761593}
-  - {fileID: 5098279737061633308}
-  - {fileID: 6768296708354752332}
-  - {fileID: 3509689537137456684}
-  - {fileID: 7330772139839573209}
-  - {fileID: 3319445688315408897}
-  - {fileID: 5475978528254780711}
---- !u!114 &3637928890789149073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3210868579716262020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d9a1d606fcc64d209fc46a66d767868, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Layers:
-  - name: Base Layer
-    states:
-    - Type: 1
-      Motion: {fileID: 0}
-      Tree: {fileID: 20600000, guid: d20ea843a908f0b4291fd74525ecc0df, type: 2}
-      Speed: 1
-    - Type: 1
-      Motion: {fileID: 0}
-      Tree: {fileID: 20600000, guid: 3f6ecc83509545146badf4629b2cfd5e, type: 2}
-      Speed: 1
-  - name: Upper Layer
-    states:
-    - Type: 0
-      Motion: {fileID: 7400000, guid: 1de0829d5c0b4174486a2fbb17e9805a, type: 2}
-      Tree: {fileID: 20600000, guid: d20ea843a908f0b4291fd74525ecc0df, type: 2}
-      Speed: 1
-    - Type: 0
-      Motion: {fileID: 7400000, guid: 4b9171ddc24ede948bd9a5c645c6c637, type: 2}
-      Tree: {fileID: 20600000, guid: 3f6ecc83509545146badf4629b2cfd5e, type: 2}
-      Speed: 1
-    - Type: 0
-      Motion: {fileID: 7400000, guid: 7e917c046fd7fd84ba70f56abc2ab48b, type: 2}
-      Tree: {fileID: 20600000, guid: 3f6ecc83509545146badf4629b2cfd5e, type: 2}
-      Speed: 1
 --- !u!1001 &2327835612565886421
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -285,3 +167,121 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7759903723462373618, guid: 350bd1f380213c9408cd947db49e27e4, type: 3}
   m_PrefabInstance: {fileID: 2327835612565886421}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &-550221905675636932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3210868579716262020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aea18a9fecfd504ba1a9c0f8ebcb60a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  Bones:
+  - {fileID: 6628006884738660600}
+  - {fileID: 6236932233965326570}
+  - {fileID: 752640013114577410}
+  - {fileID: 2010993515481899067}
+  - {fileID: 5097330601202799798}
+  - {fileID: 3125013412838807077}
+  - {fileID: 3592271447136626183}
+  - {fileID: 418859842977754906}
+  - {fileID: 5209601721158307153}
+  - {fileID: 6061709610411799406}
+  - {fileID: 1430550442692690474}
+  - {fileID: 3855807056088702476}
+  - {fileID: 5670488161767089098}
+  - {fileID: 7526592938648761593}
+  - {fileID: 5098279737061633308}
+  - {fileID: 6768296708354752332}
+  - {fileID: 3509689537137456684}
+  - {fileID: 7330772139839573209}
+  - {fileID: 3319445688315408897}
+  - {fileID: 5475978528254780711}
+  m_ExcludeBones: []
+  m_InvalidBones: []
+  m_SkeletonRootBone: {fileID: 6628006884738660600}
+  TranslationChannels: []
+  RotationChannels: []
+  ScaleChannels: []
+  FloatChannels: []
+  IntChannels: []
+--- !u!114 &1420532749784180655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3210868579716262020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d52c1de4f76b1545946555cfe16e162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RenderBones: 1
+  BoneShape: 0
+  Color: {r: 0.9528302, g: 0.25768355, b: 0.34535253, a: 1}
+  Size: 1
+  BoneMaterial: {fileID: 0}
+  RigComponent: {fileID: 0}
+  Transforms:
+  - {fileID: 6628006884738660600}
+  - {fileID: 6236932233965326570}
+  - {fileID: 752640013114577410}
+  - {fileID: 2010993515481899067}
+  - {fileID: 5097330601202799798}
+  - {fileID: 3125013412838807077}
+  - {fileID: 3592271447136626183}
+  - {fileID: 418859842977754906}
+  - {fileID: 5209601721158307153}
+  - {fileID: 6061709610411799406}
+  - {fileID: 1430550442692690474}
+  - {fileID: 3855807056088702476}
+  - {fileID: 5670488161767089098}
+  - {fileID: 7526592938648761593}
+  - {fileID: 5098279737061633308}
+  - {fileID: 6768296708354752332}
+  - {fileID: 3509689537137456684}
+  - {fileID: 7330772139839573209}
+  - {fileID: 3319445688315408897}
+  - {fileID: 5475978528254780711}
+--- !u!114 &3637928890789149073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3210868579716262020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d9a1d606fcc64d209fc46a66d767868, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Layers:
+  - name: Base Layer
+    states:
+    - Type: 1
+      Motion: {fileID: 0}
+      Tree: {fileID: 20600000, guid: d20ea843a908f0b4291fd74525ecc0df, type: 2}
+      Speed: 1
+    - Type: 1
+      Motion: {fileID: 0}
+      Tree: {fileID: 20600000, guid: 3f6ecc83509545146badf4629b2cfd5e, type: 2}
+      Speed: 1
+  - name: Upper Layer
+    states:
+    - Type: 0
+      Motion: {fileID: 7400000, guid: 1de0829d5c0b4174486a2fbb17e9805a, type: 2}
+      Tree: {fileID: 20600000, guid: d20ea843a908f0b4291fd74525ecc0df, type: 2}
+      Speed: 1
+    - Type: 0
+      Motion: {fileID: 7400000, guid: 4b9171ddc24ede948bd9a5c645c6c637, type: 2}
+      Tree: {fileID: 20600000, guid: 3f6ecc83509545146badf4629b2cfd5e, type: 2}
+      Speed: 1
+    - Type: 0
+      Motion: {fileID: 7400000, guid: 7e917c046fd7fd84ba70f56abc2ab48b, type: 2}
+      Tree: {fileID: 20600000, guid: 3f6ecc83509545146badf4629b2cfd5e, type: 2}
+      Speed: 1
