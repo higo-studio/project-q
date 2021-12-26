@@ -29,7 +29,7 @@ namespace Higo.Camera
                     waiting = ent;
                     waitingMaxPriority = vcam.Priority;
                 }
-
+                
                 PostUpdateCommands.RemoveComponent<CameraActiveRequest>(ent);
                 PostUpdateCommands.AddComponent<CameraActiveComponent>(ent);
                 PostUpdateCommands.SetComponent(ent, new CameraActiveComponent()

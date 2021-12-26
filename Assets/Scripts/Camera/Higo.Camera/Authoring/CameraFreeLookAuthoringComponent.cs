@@ -4,6 +4,8 @@ using UnityEngine;
 using Unity.Collections;
 using Unity.Mathematics;
 using System.Runtime.CompilerServices;
+using Unity.NetCode;
+using Unity.Transforms;
 
 [assembly: InternalsVisibleTo("Higo.Camera.Editor")]
 namespace Higo.Camera
@@ -117,8 +119,12 @@ namespace Higo.Camera
                 Follow = conversionSystem.GetPrimaryEntity(Follow),
                 LookAt = conversionSystem.GetPrimaryEntity(LookAt),
             });
+            
+            var loaclID = conversionSystem.GetSingleton<NetworkIdComponent>().Value;
+            var parent = dstManager.GetComponentData<Parent>(entity).Value;
+            var netID = dstManager.GetComponentData<GhostOwnerComponent>(parent).NetworkId;
 
-            if (AutoActivate)
+            if (loaclID == netID)
             {
                 dstManager.AddComponent<CameraActiveRequest>(entity);
             }
