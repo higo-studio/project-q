@@ -282,7 +282,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxBlood: 0
-  RenderPrefab: {fileID: 3210868579716262020, guid: 3a812b522d8a9c249a21e29f8df4449a, type: 3}
+  RenderPrefab: {fileID: 3210868579716262020, guid: 95aba78804b4a4672aaa2226e48ca22e, type: 3}
 --- !u!114 &3168096583819580609
 MonoBehaviour:
   m_ObjectHideFlags: 0

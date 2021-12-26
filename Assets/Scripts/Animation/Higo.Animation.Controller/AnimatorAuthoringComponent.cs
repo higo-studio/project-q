@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Animation.Hybrid;
+using System.Linq;
 
 namespace Higo.Animation.Controller
 {
-    public enum AnimationStateType
+    public enum AnimationStateAuthoringType
     {
         Clip, BlendTree
     }
@@ -15,7 +16,7 @@ namespace Higo.Animation.Controller
     [Serializable]
     public class AnimationStateAuthoring
     {
-        public AnimationStateType Type;
+        public AnimationStateAuthoringType Type;
         public AnimationClip Motion;
         public BlendTree Tree;
         public float Speed = 1;
@@ -40,29 +41,49 @@ namespace Higo.Animation.Controller
 
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
-            var layerBuffer = dstManager.AddBuffer<AnimationLayerBuffer>(entity);
-            var clipResources = dstManager.AddBuffer<ClipResource>(entity);
-            layerBuffer.EnsureCapacity(Layers.Count);
-            foreach (var layer in Layers)
             {
+                var stateBuffer = dstManager.AddBuffer<AnimationStateBuffer>(entity);
+                stateBuffer.EnsureCapacity(Layers.Sum(l => l.states != null ? l.states.Count : 0));
+                dstManager.AddBuffer<ClipResource>(entity);
+                var layerBuffer = dstManager.AddBuffer<AnimationLayerBuffer>(entity);
+                layerBuffer.EnsureCapacity(Layers.Count);
+            }
+            for (var layerIndex = 0; layerIndex < Layers.Count; layerIndex++)
+            {
+                var layer = Layers[layerIndex];
+                var layerBuffer = dstManager.GetBuffer<AnimationLayerBuffer>(entity);
+                layerBuffer.Add(new AnimationLayerBuffer()
+                {
+                    StateCount = layer.states.Count
+                });
                 foreach (var state in layer.states)
                 {
-                    if (state.Type == AnimationStateType.Clip)
+                    int resourceId = default;
+                    AnimationStateType type = default;
+                    if (state.Type == AnimationStateAuthoringType.Clip)
                     {
                         conversionSystem.DeclareAssetDependency(gameObject, state.Motion);
-                        clipResources.Add(new ClipResource()
+                        var clipResources = dstManager.GetBuffer<ClipResource>(entity);
+                        resourceId = clipResources.Add(new ClipResource()
                         {
                             MotionSpeed = state.Speed,
                             Motion = conversionSystem.BlobAssetStore.GetClip(state.Motion)
                         });
+                        type = AnimationStateType.Clip;
                     }
-                    else if (state.Type == AnimationStateType.BlendTree)
+                    else if (state.Type == AnimationStateAuthoringType.BlendTree)
                     {
                         conversionSystem.DeclareAssetDependency(gameObject, state.Tree);
-                        BlendTreeConversion.Convert(state.Tree, entity, dstManager);
+                        resourceId = BlendTreeConversion.Convert(state.Tree, entity, dstManager);
+                        type = state.Tree.blendType == BlendTreeType.Simple1D ? AnimationStateType.Blend1D : AnimationStateType.Blend2D;
                     }
+                    var stateBuffer = dstManager.GetBuffer<AnimationStateBuffer>(entity);
+                    stateBuffer.Add(new AnimationStateBuffer()
+                    {
+                        ResourceId = resourceId,
+                        Type = type
+                    });
                 }
-                layerBuffer.Add(new AnimationLayerBuffer());
             }
         }
     }

@@ -109,7 +109,7 @@ public class AnimatorAuthoringComponentEditor : Editor
                     rect.y += EditorGUIUtility.singleLineHeight + 2;
                     EG.PropertyField(rect, typeProp);
                     rect.y += EditorGUIUtility.singleLineHeight + 2;
-                    if (typeProp.enumValueIndex == (int)AnimationStateType.Clip)
+                    if (typeProp.enumValueIndex == (int)AnimationStateAuthoringType.Clip)
                     {
                         EG.PropertyField(rect, prop.FindPropertyRelative("Motion"));
                     }
@@ -118,7 +118,7 @@ public class AnimatorAuthoringComponentEditor : Editor
                         EG.PropertyField(rect, prop.FindPropertyRelative("Tree"));
                     }
                     rect.y += EditorGUIUtility.singleLineHeight + 2;
-                    EG.BeginDisabledGroup(typeProp.enumValueIndex == (int)AnimationStateType.BlendTree);
+                    EG.BeginDisabledGroup(typeProp.enumValueIndex == (int)AnimationStateAuthoringType.BlendTree);
                     EG.PropertyField(rect, prop.FindPropertyRelative("Speed"));
                     EG.EndDisabledGroup();
                 };
