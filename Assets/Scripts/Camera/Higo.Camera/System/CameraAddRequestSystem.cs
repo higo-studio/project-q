@@ -4,7 +4,7 @@ using UnityEngine;
 using Unity.NetCode;
 using Unity.Transforms;
 
-[UpdateInGroup(typeof(CameraLateUpdateGroup))]
+[UpdateInGroup(typeof(GhostInputSystemGroup))]
 public class CameraAddRequestSystem : SystemBase
 {
     protected override void OnCreate()
