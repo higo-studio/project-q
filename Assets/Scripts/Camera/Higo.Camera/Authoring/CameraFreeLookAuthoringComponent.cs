@@ -119,12 +119,8 @@ namespace Higo.Camera
                 Follow = conversionSystem.GetPrimaryEntity(Follow),
                 LookAt = conversionSystem.GetPrimaryEntity(LookAt),
             });
-            
-            var loaclID = conversionSystem.GetSingleton<NetworkIdComponent>().Value;
-            var parent = dstManager.GetComponentData<Parent>(entity).Value;
-            var netID = dstManager.GetComponentData<GhostOwnerComponent>(parent).NetworkId;
 
-            if (loaclID == netID)
+            if (AutoActivate)
             {
                 dstManager.AddComponent<CameraActiveRequest>(entity);
             }
