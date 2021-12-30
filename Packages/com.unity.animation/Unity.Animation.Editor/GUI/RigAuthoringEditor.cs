@@ -170,8 +170,8 @@ namespace Unity.Animation.Authoring.Editor
             }
 
             EditorGUILayout.PropertyField(transformChannelsProperty, s_TransformChannels, false);
-            if (!transformChannelsProperty.isExpanded)
-                return;
+            // if (!transformChannelsProperty.isExpanded)
+            //     return;
 
             if (targets.Length > 1)
             {

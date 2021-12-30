@@ -219,8 +219,8 @@ namespace Unity.Animation.Editor
         void ShowTransformHierarchy(RigComponent rigComponent, SerializedProperty bonesProp, SerializedProperty excludeBonesProp, SerializedProperty invalidBonesProp, SerializedProperty skeletonRootBoneProp)
         {
             EditorGUILayout.PropertyField(bonesProp, false);
-            if (!bonesProp.isExpanded)
-                return;
+            // if (!bonesProp.isExpanded)
+            //     return;
 
             if (targets.Length > 1)
             {
