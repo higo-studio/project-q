@@ -10,20 +10,21 @@ namespace Higo.Animation.Controller
     {
         Clip, Blend1D, Blend2D
     }
-    public struct ClipResource : ISystemStateBufferElementData
+    public struct ClipResource : IBufferElementData
     {
         public float MotionSpeed;
         public BlobAssetReference<Unity.Animation.Clip> Motion;
     }
 
-    public struct AnimationStateResource : ISystemStateBufferElementData
+    public struct AnimationStateResource : IBufferElementData
     {
+        public StringHash Hash;
         public int ResourceId;
         public AnimationStateType Type;
         public NodeHandle Node;
     }
 
-    public struct AnimationLayerResource : ISystemStateBufferElementData
+    public struct AnimationLayerResource : IBufferElementData
     {
         public int Count;
         public int StartIndex;

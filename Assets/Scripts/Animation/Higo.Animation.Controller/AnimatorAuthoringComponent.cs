@@ -42,15 +42,10 @@ namespace Higo.Animation.Controller
 
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
-            {
-                var stateBuffer = dstManager.AddBuffer<AnimationStateResource>(entity);
-                stateBuffer.EnsureCapacity(Layers.Sum(l => l.states != null ? l.states.Count : 0));
-                dstManager.AddBuffer<ClipResource>(entity);
-                var layerBuffer = dstManager.AddBuffer<AnimationLayerResource>(entity);
-                layerBuffer.EnsureCapacity(Layers.Count);
-
-                dstManager.AddComponentData(entity, new DeltaTime());
-            }
+            dstManager.AddBuffer<AnimationStateResource>(entity);
+            dstManager.AddBuffer<ClipResource>(entity);
+            dstManager.AddBuffer<AnimationLayerResource>(entity);
+            dstManager.AddComponent<DeltaTime>(entity);
             var rig = dstManager.GetComponentData<Rig>(entity);
             for (var layerIndex = 0; layerIndex < Layers.Count; layerIndex++)
             {
@@ -66,6 +61,7 @@ namespace Higo.Animation.Controller
                 }
                 foreach (var state in layer.states)
                 {
+                    StringHash hash = default;
                     int resourceId = default;
                     AnimationStateType type = default;
                     if (state.Type == AnimationStateAuthoringType.Clip)
@@ -78,6 +74,7 @@ namespace Higo.Animation.Controller
                             Motion = conversionSystem.BlobAssetStore.GetClip(state.Motion)
                         });
                         type = AnimationStateType.Clip;
+                        hash = new StringHash(state.Motion.name);
                     }
                     else if (state.Type == AnimationStateAuthoringType.BlendTree)
                     {
@@ -95,10 +92,12 @@ namespace Higo.Animation.Controller
                         }
 
                         type = state.Tree.blendType == BlendTreeType.Simple1D ? AnimationStateType.Blend1D : AnimationStateType.Blend2D;
+                        hash = new StringHash(state.Tree.name);
                     }
                     var stateBuffer = dstManager.GetBuffer<AnimationStateResource>(entity);
                     stateBuffer.Add(new AnimationStateResource()
                     {
+                        Hash = hash,
                         ResourceId = resourceId,
                         Type = type
                     });
