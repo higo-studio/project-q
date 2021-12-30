@@ -1,5 +1,6 @@
 {
     "name": "Higo.CharacterController",
+    "rootNamespace": "",
     "references": [
         "GUID:734d92eba21c94caba915361bd5ac177",
         "GUID:63afb046c8423dd448ae7aba042ea63d",

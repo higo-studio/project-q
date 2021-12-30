@@ -1,0 +1,30 @@
+{
+    "name": "Unity.DataFlowGraph.CodeGen.InternalsAccess.Tests",
+    "references": [
+        "Unity.DataFlowGraph",
+        "Unity.DataFlowGraph.Tests",
+        "Unity.Burst",
+        "Unity.DataFlowGraph.CodeGen",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Unity.DataFlowGraph.CodeGen.Tests"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Mono.Cecil.dll",
+        "Mono.Cecil.Rocks.dll",
+        "Mono.Cecil.Pdb.dll",
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

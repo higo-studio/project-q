@@ -1,0 +1,38 @@
+{
+  "name": "com.unity.dataflowgraph",
+  "displayName": "Data Flow Graph",
+  "version": "0.19.0-preview.7",
+  "unity": "2020.1",
+  "description": "Data Flow Graph delivers DOTS-optimized code for graph-like problems, i.e., where order-of-execution is important.\n\nThis is a highly experimental package and should NOT be considered suitable for production situations.",
+  "keywords": [
+    "graph",
+    "processing"
+  ],
+  "dependencies": {
+    "com.unity.entities": "0.17.0-preview.41",
+    "com.unity.jobs": "0.8.0-preview.23",
+    "com.unity.collections": "0.15.0-preview.21",
+    "com.unity.mathematics": "1.2.1",
+    "com.unity.burst": "1.4.1"
+  },
+  "upmCi": {
+    "footprint": "a0225f69e55b46afc145db7e863c4a1717c7db8b"
+  },
+  "repository": {
+    "url": "https://github.com/Unity-Technologies/com.unity.dataflowgraph.git",
+    "type": "git",
+    "revision": "ae70ef287c371ebfe4f30262ec94de29ea9606ef"
+  },
+  "samples": [
+    {
+      "displayName": "Examples",
+      "description": "Very basic framework usage/authoring example.",
+      "path": "Samples~/Example"
+    },
+    {
+      "displayName": "Guided Tour in Code",
+      "description": "A guided tour of the API via commented and runnable code examples.",
+      "path": "Samples~/Tour"
+    }
+  ]
+}
