@@ -1,7 +1,9 @@
 {
     "name": "Higo.Animation.Controller.Editor",
+    "rootNamespace": "",
     "references": [
-        "GUID:1964b8c0ff7e547afb1f45df94ecd10f"
+        "GUID:1964b8c0ff7e547afb1f45df94ecd10f",
+        "GUID:85695455edfb34e3f818bd6690cfb2ec"
     ],
     "includePlatforms": [
         "Editor"

@@ -26,9 +26,12 @@ namespace Higo.Animation.Controller
 
     public struct AnimationLayerResource : IBufferElementData
     {
-        public int Count;
-        public int StartIndex;
+        public int StateCount;
+        public int StateStartIndex;
         public NodeHandle NMixerNode;
+        public NodeHandle WeightMaskNode;
+        public int ChannelWeightTableCount;
+        public BlobAssetReference<ChannelWeightTable> ChannelWeightTableRef;
     }
 
     public struct AnimationControllerSystemStateGraphData : ISystemStateComponentData

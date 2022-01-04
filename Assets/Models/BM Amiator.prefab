@@ -59,6 +59,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BM Amiator
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 350bd1f380213c9408cd947db49e27e4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5866666021909216657, guid: 350bd1f380213c9408cd947db49e27e4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 350bd1f380213c9408cd947db49e27e4, type: 3}
@@ -262,6 +266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Layers:
   - name: Base Layer
+    channelWeightMap: []
     states:
     - Type: 1
       Motion: {fileID: 0}
@@ -272,6 +277,23 @@ MonoBehaviour:
       Tree: {fileID: 20600000, guid: 3f6ecc83509545146badf4629b2cfd5e, type: 2}
       Speed: 1
   - name: Upper Layer
+    channelWeightMap:
+    - Id: {fileID: 6236932233965326570}
+      Weight: 0
+    - Id: {fileID: 752640013114577410}
+      Weight: 0
+    - Id: {fileID: 2010993515481899067}
+      Weight: 0
+    - Id: {fileID: 5097330601202799798}
+      Weight: 0
+    - Id: {fileID: 3125013412838807077}
+      Weight: 0
+    - Id: {fileID: 3592271447136626183}
+      Weight: 0
+    - Id: {fileID: 418859842977754906}
+      Weight: 0
+    - Id: {fileID: 5209601721158307153}
+      Weight: 0
     states:
     - Type: 0
       Motion: {fileID: 7400000, guid: 1de0829d5c0b4174486a2fbb17e9805a, type: 2}

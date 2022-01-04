@@ -16,6 +16,8 @@ public class AnimatorAuthoringComponentEditor : Editor
     SerializedProperty layersProperty;
     GUIStyle lockButtonStyle;
     bool countLocked = true;
+    bool defailtFoldout = false;
+    bool maskFoldout = false;
     protected void OnEnable()
     {
         layersProperty = serializedObject.FindProperty("Layers");
@@ -56,9 +58,28 @@ public class AnimatorAuthoringComponentEditor : Editor
         L.EndHorizontal();
 
         serializedObject.Update();
-        foreach (var list in llist)
+        if (defailtFoldout = EL.Foldout(defailtFoldout, "Layer Detail", true))
         {
-            list.DoLayoutList();
+            foreach (var list in llist)
+            {
+                list.DoLayoutList();
+            }
+        }
+
+        if (maskFoldout = EL.Foldout(maskFoldout, "Layer Mask", true))
+        {
+            EditorGUI.indentLevel++;
+            for (var i = 0; i < layersProperty.arraySize; i++)
+            {
+                var ele = layersProperty.GetArrayElementAtIndex(i);
+                var layerNameProperty = ele.FindPropertyRelative("name");
+                var layerWeights = ele.FindPropertyRelative("channelWeightMap");
+                EL.PropertyField(layerWeights, new GUIContent(layerNameProperty.stringValue));
+                var controlRect = GUILayoutUtility.GetLastRect();
+                controlRect.height = EditorGUIUtility.singleLineHeight;
+                DoDrag(controlRect, layerWeights);
+            }
+            EditorGUI.indentLevel--;
         }
         serializedObject.ApplyModifiedProperties();
     }
@@ -87,8 +108,8 @@ public class AnimatorAuthoringComponentEditor : Editor
                 list.drawHeaderCallback = (rect) =>
                 {
                     var lockWidth = 20;
-                    lockedList[localIdx] = GUI.Toggle(new Rect(rect.x, rect.y, lockWidth, rect.height), lockedList[localIdx], GUIContent.none, lockButtonStyle);
-                    var textRect = new Rect(rect.x + lockWidth, rect.y, rect.width - lockWidth, rect.height);
+                    lockedList[localIdx] = GUI.Toggle(new Rect(rect.x, rect.y, lockWidth, EditorGUIUtility.singleLineHeight), lockedList[localIdx], GUIContent.none, lockButtonStyle);
+                    var textRect = new Rect(rect.x + lockWidth, rect.y, rect.width - lockWidth, EditorGUIUtility.singleLineHeight);
                     if (lockedList[localIdx])
                     {
                         EG.LabelField(textRect, layerNameProperty.stringValue);
@@ -126,6 +147,37 @@ public class AnimatorAuthoringComponentEditor : Editor
                 llist.Add(list);
                 lockedList.Add(true);
             }
+        }
+    }
+
+    void DoDrag(Rect rect, SerializedProperty layerWeightsProp)
+    {
+        Event evt = Event.current;
+        switch (evt.type)
+        {
+            case EventType.DragUpdated:
+            case EventType.DragPerform:
+                if (!rect.Contains(evt.mousePosition)) return;
+
+                DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+
+                if (evt.type == EventType.DragPerform)
+                {
+                    DragAndDrop.AcceptDrag();
+                    var refs = DragAndDrop.objectReferences;
+                    foreach(var reff in refs)
+                    {
+                        if (reff is Transform)
+                        {
+                            var trs = reff as Transform;
+                            var idx = layerWeightsProp.arraySize;
+                            layerWeightsProp.InsertArrayElementAtIndex(idx);
+                            var childProp = layerWeightsProp.GetArrayElementAtIndex(idx);
+                            childProp.FindPropertyRelative("Id").objectReferenceValue = trs;
+                        }
+                    }
+                }
+                break;
         }
     }
 }

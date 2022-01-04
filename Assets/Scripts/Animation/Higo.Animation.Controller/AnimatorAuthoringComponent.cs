@@ -6,6 +6,8 @@ using Unity.Entities;
 using Unity.Animation;
 using Unity.Animation.Hybrid;
 using System.Linq;
+using Unity.Animation.Authoring;
+using Unity.Collections;
 
 namespace Higo.Animation.Controller
 {
@@ -24,15 +26,33 @@ namespace Higo.Animation.Controller
     }
 
     [Serializable]
+    public struct AnimatorChannelWeightMap
+    {
+        public Transform Id;
+        public float Weight;
+
+        public static implicit operator AnimatorChannelWeightMap(Transform src)
+        {
+            return new AnimatorChannelWeightMap()
+            {
+                Id = src,
+                Weight = 0,
+            };
+        }
+    }
+
+    [Serializable]
     public class AnimationLayerAuthoring
     {
         public string name = "Base Layer";
+        public AnimatorChannelWeightMap[] channelWeightMap = Array.Empty<AnimatorChannelWeightMap>();
         public List<AnimationStateAuthoring> states = new List<AnimationStateAuthoring>()
         {
             new AnimationStateAuthoring()
         };
     }
 
+    [RequireComponent(typeof(RigComponent))]
     public class AnimatorAuthoringComponent : MonoBehaviour, IConvertGameObjectToEntity
     {
         public List<AnimationLayerAuthoring> Layers = new List<AnimationLayerAuthoring>()
@@ -47,16 +67,42 @@ namespace Higo.Animation.Controller
             dstManager.AddBuffer<AnimationLayerResource>(entity);
             dstManager.AddComponent<DeltaTime>(entity);
             var rig = dstManager.GetComponentData<Rig>(entity);
+            var hasher = BindingHashGlobals.DefaultHashGenerator; ;
             for (var layerIndex = 0; layerIndex < Layers.Count; layerIndex++)
             {
+                var tableRef = BlobAssetReference<ChannelWeightTable>.Null;
+                var tableCount = 0;
                 var layer = Layers[layerIndex];
+                var animatorChannelMap = layer.channelWeightMap;
+                if (animatorChannelMap != null && animatorChannelMap.Length > 0)
+                {
+                    var query = new ChannelWeightQuery();
+                    var channelWeightMap = new ChannelWeightMap[animatorChannelMap.Length];
+                    for(var i = 0; i < channelWeightMap.Length; i++)
+                    {
+                        var data = animatorChannelMap[i];
+                        channelWeightMap[i] = new ChannelWeightMap()
+                        {
+                            Id = hasher.ToHash(ToTransformBindingID(data.Id, transform)),
+                            Weight = data.Weight
+                        };
+                    }
+
+                    query.Channels = channelWeightMap;
+                    tableRef = query.ToChannelWeightTable(rig);
+                    tableCount = tableRef.Value.Weights.Length;
+                }
                 {
                     var layerBuffer = dstManager.GetBuffer<AnimationLayerResource>(entity);
                     var stateBuffer = dstManager.GetBuffer<AnimationStateResource>(entity);
+
+                    // layer.channelWeightMap
                     layerBuffer.Add(new AnimationLayerResource()
                     {
-                        Count = layer.states.Count,
-                        StartIndex = stateBuffer.Length
+                        StateCount = layer.states.Count,
+                        StateStartIndex = stateBuffer.Length,
+                        ChannelWeightTableRef = tableRef,
+                        ChannelWeightTableCount = tableCount
                     });
                 }
                 foreach (var state in layer.states)
@@ -104,5 +150,10 @@ namespace Higo.Animation.Controller
                 }
             }
         }
+        static internal TransformBindingID ToTransformBindingID(Transform target, Transform root) =>
+            new TransformBindingID { Path = RigGenerator.ComputeRelativePath(target, root) };
+
+        static internal GenericBindingID ToGenericBindingID(string id) =>
+            new GenericBindingID { Path = string.IsNullOrEmpty(id) ? string.Empty : System.IO.Path.GetDirectoryName(id), AttributeName = System.IO.Path.GetFileName(id) };
     }
 }

@@ -121,37 +121,43 @@ namespace Higo.Animation.Controller
             set.Connect(data.EntityNode, data.DeltaTimeNode, ConvertDeltaTimeToFloatNode.KernelPorts.Input);
             set.Connect(data.DeltaTimeNode, ConvertDeltaTimeToFloatNode.KernelPorts.Output, data.TimeCounterNode, TimeCounterNode.KernelPorts.DeltaTime);
             set.Connect(data.TimeCounterNode, TimeCounterNode.KernelPorts.Time, data.TimeLoopNode, TimeLoopNode.KernelPorts.InputTime);
-            // set.Connect(data.TimeLoopNode, TimeLoopNode.KernelPorts.OutputTime, data.BlendTreeNode, BlendTree1DNode.KernelPorts.NormalizedTime);
 
-            // set.Connect(data.BlendTreeNode, BlendTree1DNode.KernelPorts.Duration, data.FloatRcpNode, FloatRcpNode.KernelPorts.Input);
-            // set.Connect(data.FloatRcpNode, FloatRcpNode.KernelPorts.Output, data.TimeCounterNode, TimeCounterNode.KernelPorts.Speed);
-
-            // set.Connect(data.BlendTreeNode, BlendTree1DNode.KernelPorts.Output, data.EntityNode, NodeSet.ConnectionType.Feedback);
-            // set.Connect(data.EntityNode, data.BlendTreeInputNode, ExtractBlendTree1DParametersNode.KernelPorts.Input, NodeSet.ConnectionType.Feedback);
-            // set.Connect(data.BlendTreeInputNode, ExtractBlendTree1DParametersNode.KernelPorts.Output, data.BlendTreeNode, BlendTree1DNode.KernelPorts.BlendParameter);
-
-            // set.SendMessage(data.BlendTreeNode, BlendTree1DNode.SimulationPorts.Rig, rig);
-            // set.SendMessage(data.BlendTreeNode, BlendTree1DNode.SimulationPorts.BlendTree, data.BlendTreeAsset);
             for (var layerIndex = 0; layerIndex < layerBuffer.Length; layerIndex++)
             {
                 ref var layer = ref layerBuffer.ElementAt(layerIndex);
                 var nmixer = graphSystem.CreateNode<NMixerNode>(rootHandler);
-                set.SetPortArraySize(nmixer, NMixerNode.KernelPorts.Inputs, layer.Count);
-                set.SetPortArraySize(nmixer, NMixerNode.KernelPorts.Weights, layer.Count);
-
-                layer.NMixerNode = nmixer;
+                set.SetPortArraySize(nmixer, NMixerNode.KernelPorts.Inputs, layer.StateCount);
+                set.SetPortArraySize(nmixer, NMixerNode.KernelPorts.Weights, layer.StateCount);
                 set.SetData(data.LayerMixerNode, LayerMixerNode.KernelPorts.BlendingModes, layerIndex, BlendingMode.Override);
                 set.Connect(nmixer, NMixerNode.KernelPorts.Output, data.LayerMixerNode, LayerMixerNode.KernelPorts.Inputs, layerIndex);
                 set.Connect(data.ParamNode, ExtractAnimatorParametersNode.KernelPorts.LayerWeightsOutput, layerIndex, data.LayerMixerNode, LayerMixerNode.KernelPorts.Weights, layerIndex);
                 set.SendMessage(nmixer, NMixerNode.SimulationPorts.Rig, in rig);
+                layer.NMixerNode = nmixer;
+
+                if (layer.ChannelWeightTableCount > 0)
+                {
+                    var weightMasker = graphSystem.CreateNode<WeightBuilderNode>(rootHandler);
+                    ref var weightEntrys = ref layer.ChannelWeightTableRef.Value.Weights;
+                    set.SetPortArraySize(weightMasker, WeightBuilderNode.KernelPorts.ChannelIndices, weightEntrys.Length);
+                    set.SetPortArraySize(weightMasker, WeightBuilderNode.KernelPorts.ChannelWeights, weightEntrys.Length);
+                    set.SetData(weightMasker, WeightBuilderNode.KernelPorts.DefaultWeight, 1f);
+                    set.SendMessage(weightMasker, WeightBuilderNode.SimulationPorts.Rig, in rig);
+                    for (var i = 0; i < weightEntrys.Length; i++)
+                    {
+                        set.SetData(weightMasker, WeightBuilderNode.KernelPorts.ChannelIndices, i, weightEntrys[i].Index);
+                        set.SetData(weightMasker, WeightBuilderNode.KernelPorts.ChannelWeights, i, weightEntrys[i].Weight);
+                    }
+                    set.Connect(weightMasker, WeightBuilderNode.KernelPorts.Output, data.LayerMixerNode, LayerMixerNode.KernelPorts.WeightMasks, layerIndex);
+                    layer.WeightMaskNode = weightMasker;
+                }
 
                 layerParamBuffer.Add(new AnimationControllerLayerParamBuffer()
                 {
                     Weight = 1f / layerBuffer.Length
                 });
-                for (var i = 0; i < layer.Count; i++)
+                for (var i = 0; i < layer.StateCount; i++)
                 {
-                    ref var state = ref stateBuffer.ElementAt(i + layer.StartIndex);
+                    ref var state = ref stateBuffer.ElementAt(i + layer.StateStartIndex);
                     if (state.Type == AnimationStateType.Clip)
                     {
                         var clipNode = graphSystem.CreateNode<UberClipNode>(rootHandler);
@@ -173,7 +179,7 @@ namespace Higo.Animation.Controller
                         state.Node = btNode;
                         set.Connect(btNode, UpBlendTree1DNode.KernelPorts.Output, nmixer, NMixerNode.KernelPorts.Inputs, i);
                         set.Connect(data.DeltaTimeNode, ConvertDeltaTimeToFloatNode.KernelPorts.Output, btNode, UpBlendTree1DNode.KernelPorts.DeltaTime);
-                        set.Connect(data.ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateParamXsOutput, i + layer.StartIndex, btNode, UpBlendTree1DNode.KernelPorts.BlendValue);
+                        set.Connect(data.ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateParamXsOutput, i + layer.StateStartIndex, btNode, UpBlendTree1DNode.KernelPorts.BlendValue);
 
                         set.SendMessage(btNode, UpBlendTree1DNode.SimulationPorts.Rig, in rig);
                         set.SendMessage(btNode, UpBlendTree1DNode.SimulationPorts.BlendTree,
@@ -185,17 +191,17 @@ namespace Higo.Animation.Controller
                         state.Node = btNode;
                         set.Connect(btNode, UpBlendTree2DNode.KernelPorts.Output, nmixer, NMixerNode.KernelPorts.Inputs, i);
                         set.Connect(data.DeltaTimeNode, ConvertDeltaTimeToFloatNode.KernelPorts.Output, btNode, UpBlendTree2DNode.KernelPorts.DeltaTime);
-                        set.Connect(data.ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateParamXsOutput, i + layer.StartIndex, btNode, UpBlendTree2DNode.KernelPorts.BlendValueX);
-                        set.Connect(data.ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateParamYsOutput, i + layer.StartIndex, btNode, UpBlendTree2DNode.KernelPorts.BlendValueY);
+                        set.Connect(data.ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateParamXsOutput, i + layer.StateStartIndex, btNode, UpBlendTree2DNode.KernelPorts.BlendValueX);
+                        set.Connect(data.ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateParamYsOutput, i + layer.StateStartIndex, btNode, UpBlendTree2DNode.KernelPorts.BlendValueY);
 
                         set.SendMessage(btNode, UpBlendTree2DNode.SimulationPorts.Rig, in rig);
                         set.SendMessage(btNode, UpBlendTree2DNode.SimulationPorts.BlendTree, BlendTreeBuilder.CreateBlendTree2DFromComponents(b2dResource[state.ResourceId], entityManager, entity));
                     }
-                    set.Connect(data.ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateWeightsOutput, i + layer.StartIndex, nmixer, NMixerNode.KernelPorts.Weights, i);
+                    set.Connect(data.ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateWeightsOutput, i + layer.StateStartIndex, nmixer, NMixerNode.KernelPorts.Weights, i);
 
                     stateParamBuffer.Add(new AnimationControllerStateParamBuffer()
                     {
-                        Weight = 1f / layer.Count
+                        Weight = 1f / layer.StateCount
                     });
                 }
             }
@@ -223,9 +229,9 @@ namespace Higo.Animation.Controller
             {
                 var layer = layerBuffer[layerIndex];
                 set.Destroy(layer.NMixerNode);
-                for (var i = 0; i < layer.Count; i++)
+                for (var i = 0; i < layer.StateCount; i++)
                 {
-                    var state = stateBuffer[i + layer.StartIndex];
+                    var state = stateBuffer[i + layer.StateStartIndex];
                     set.Destroy(state.Node);
                 }
             }

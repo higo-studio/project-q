@@ -1,0 +1,412 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 443ffd85a1f3f45909cb74209228ae9b, type: 3}
+  m_Name: BM Amiator
+  m_EditorClassIdentifier: 
+  m_TransformChannels:
+  - ID:
+      Path: 
+    Properties:
+      DefaultTranslationValue:
+        x: 0
+        y: 0
+        z: 0
+      DefaultRotationValue:
+        value:
+          x: 0
+          y: 0
+          z: 0
+          w: 1
+      DefaultScaleValue:
+        x: 1
+        y: 1
+        z: 1
+  - ID:
+      Path: BMod
+    Properties:
+      DefaultTranslationValue:
+        x: -0
+        y: 0
+        z: 0
+      DefaultRotationValue:
+        value:
+          x: 0.000000081460335
+          y: 0
+          z: -0
+          w: 1
+      DefaultScaleValue:
+        x: 100
+        y: 100
+        z: 100
+  - ID:
+      Path: Skeleton
+    Properties:
+      DefaultTranslationValue:
+        x: -0
+        y: 1.8499998
+        z: 0
+      DefaultRotationValue:
+        value:
+          x: -0.7071068
+          y: 0
+          z: -0
+          w: 0.7071067
+      DefaultScaleValue:
+        x: 100
+        y: 100
+        z: 100
+  - ID:
+      Path: Skeleton/Hips
+    Properties:
+      DefaultTranslationValue:
+        x: -0
+        y: 0.00049999997
+        z: -0.0085
+      DefaultRotationValue:
+        value:
+          x: 0.7071068
+          y: 0
+          z: -0
+          w: 0.7071067
+      DefaultScaleValue:
+        x: 1
+        y: 1
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Left_UpperLeg
+    Properties:
+      DefaultTranslationValue:
+        x: -0.0019999999
+        y: 0.0000000011920929
+        z: 0
+      DefaultRotationValue:
+        value:
+          x: 0.0026489068
+          y: 0.086728096
+          z: 0.99576384
+          w: 0.030423317
+      DefaultScaleValue:
+        x: 0.9999999
+        y: 1
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Left_UpperLeg/Left_LowerLeg
+    Properties:
+      DefaultTranslationValue:
+        x: -3.7926426e-11
+        y: 0.004999999
+        z: 2.9802322e-10
+      DefaultRotationValue:
+        value:
+          x: -0.18913577
+          y: -0.0014077921
+          z: 0.000008889527
+          w: 0.98195
+      DefaultScaleValue:
+        x: 0.9999999
+        y: 0.99999994
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Left_UpperLeg/Left_LowerLeg/Left_Foot
+    Properties:
+      DefaultTranslationValue:
+        x: 1.9965227e-10
+        y: 0.0045000035
+        z: 2.3050233e-10
+      DefaultRotationValue:
+        value:
+          x: 0.75810945
+          y: 0.10954997
+          z: -0.06978146
+          w: 0.6390614
+      DefaultScaleValue:
+        x: 0.99999994
+        y: 0.99999994
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Left_UpperLeg/Left_LowerLeg/Left_Foot/Left_Foot_end
+    Properties:
+      DefaultTranslationValue:
+        x: -0
+        y: 0.0014999999
+        z: 0
+      DefaultRotationValue:
+        value:
+          x: 0
+          y: -0
+          z: -0
+          w: 1
+      DefaultScaleValue:
+        x: 1
+        y: 1
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Right_UpperLeg
+    Properties:
+      DefaultTranslationValue:
+        x: 0.0019999999
+        y: 0.0000000011920929
+        z: 0
+      DefaultRotationValue:
+        value:
+          x: -0.002649263
+          y: 0.086728096
+          z: 0.99576384
+          w: -0.030423287
+      DefaultScaleValue:
+        x: 0.99999994
+        y: 1
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Right_UpperLeg/Right_LowerLeg
+    Properties:
+      DefaultTranslationValue:
+        x: 7.598025e-11
+        y: 0.0050000004
+        z: 6.519258e-11
+      DefaultRotationValue:
+        value:
+          x: -0.18913576
+          y: 0.0014077917
+          z: -0.000008889163
+          w: 0.98195
+      DefaultScaleValue:
+        x: 0.99999994
+        y: 0.99999994
+        z: 0.99999994
+  - ID:
+      Path: Skeleton/Hips/Right_UpperLeg/Right_LowerLeg/Right_Foot
+    Properties:
+      DefaultTranslationValue:
+        x: -1.7447746e-10
+        y: 0.0045000063
+        z: 5.797483e-10
+      DefaultRotationValue:
+        value:
+          x: 0.75810945
+          y: -0.10955021
+          z: 0.06978173
+          w: 0.6390613
+      DefaultScaleValue:
+        x: 0.99999994
+        y: 1.0000001
+        z: 1.0000001
+  - ID:
+      Path: Skeleton/Hips/Right_UpperLeg/Right_LowerLeg/Right_Foot/Right_Foot_end
+    Properties:
+      DefaultTranslationValue:
+        x: -0
+        y: 0.0014999999
+        z: 0
+      DefaultRotationValue:
+        value:
+          x: 0
+          y: -0
+          z: -0
+          w: 1
+      DefaultScaleValue:
+        x: 1
+        y: 1
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Spine
+    Properties:
+      DefaultTranslationValue:
+        x: -0
+        y: 0.0014999998
+        z: 0
+      DefaultRotationValue:
+        value:
+          x: -0.06825951
+          y: 0
+          z: -0
+          w: 0.9976676
+      DefaultScaleValue:
+        x: 1
+        y: 1
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Spine/Chest
+    Properties:
+      DefaultTranslationValue:
+        x: -0
+        y: 0.0030000007
+        z: -7.4505804e-11
+      DefaultRotationValue:
+        value:
+          x: 0.10360689
+          y: 0
+          z: -0
+          w: 0.99461836
+      DefaultScaleValue:
+        x: 1
+        y: 0.99999994
+        z: 0.99999994
+  - ID:
+      Path: Skeleton/Hips/Spine/Chest/Left_UpperArm
+    Properties:
+      DefaultTranslationValue:
+        x: -0.0032876746
+        y: 0.0035
+        z: -3.4924594e-11
+      DefaultRotationValue:
+        value:
+          x: 0.006002998
+          y: -0.06713834
+          z: 0.9937608
+          w: 0.08885881
+      DefaultScaleValue:
+        x: 0.99999994
+        y: 0.9999999
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Spine/Chest/Left_UpperArm/Left_LowerArm
+    Properties:
+      DefaultTranslationValue:
+        x: 4.5634804e-10
+        y: 0.0029999998
+        z: 7.684463e-11
+      DefaultRotationValue:
+        value:
+          x: 0.27286145
+          y: 0.13490705
+          z: -0.007785483
+          w: 0.95251566
+      DefaultScaleValue:
+        x: 0.99999994
+        y: 1
+        z: 0.99999994
+  - ID:
+      Path: Skeleton/Hips/Spine/Chest/Left_UpperArm/Left_LowerArm/Left_LowerArm_end
+    Properties:
+      DefaultTranslationValue:
+        x: -0
+        y: 0.0039999993
+        z: 0
+      DefaultRotationValue:
+        value:
+          x: 0
+          y: -0
+          z: -0
+          w: 1
+      DefaultScaleValue:
+        x: 1
+        y: 1
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Spine/Chest/Neck
+    Properties:
+      DefaultTranslationValue:
+        x: -0
+        y: 0.0040000016
+        z: -2.2409949e-11
+      DefaultRotationValue:
+        value:
+          x: 0.0788643
+          y: 0
+          z: -0
+          w: 0.99688536
+      DefaultScaleValue:
+        x: 1
+        y: 1
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Spine/Chest/Neck/Head
+    Properties:
+      DefaultTranslationValue:
+        x: -0
+        y: 0.0015000006
+        z: 1.8626451e-11
+      DefaultRotationValue:
+        value:
+          x: -0.12997836
+          y: 0
+          z: -0
+          w: 0.9915168
+      DefaultScaleValue:
+        x: 1
+        y: 1
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Spine/Chest/Neck/Head/Head_end
+    Properties:
+      DefaultTranslationValue:
+        x: -0
+        y: 0.0040000007
+        z: 0
+      DefaultRotationValue:
+        value:
+          x: 0
+          y: -0
+          z: -0
+          w: 1
+      DefaultScaleValue:
+        x: 1
+        y: 1
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Spine/Chest/Right_UpperArm
+    Properties:
+      DefaultTranslationValue:
+        x: 0.0032876746
+        y: 0.0035
+        z: -3.4924594e-11
+      DefaultRotationValue:
+        value:
+          x: -0.006002964
+          y: -0.06713783
+          z: 0.9937608
+          w: -0.088858806
+      DefaultScaleValue:
+        x: 0.9999999
+        y: 0.9999999
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Spine/Chest/Right_UpperArm/Right_LowerArm
+    Properties:
+      DefaultTranslationValue:
+        x: -2.2351741e-10
+        y: 0.0029999996
+        z: -9.518956e-11
+      DefaultRotationValue:
+        value:
+          x: 0.27286148
+          y: -0.13490659
+          z: 0.007785364
+          w: 0.9525157
+      DefaultScaleValue:
+        x: 0.99999994
+        y: 0.9999998
+        z: 1
+  - ID:
+      Path: Skeleton/Hips/Spine/Chest/Right_UpperArm/Right_LowerArm/Right_LowerArm_end
+    Properties:
+      DefaultTranslationValue:
+        x: -0
+        y: 0.0039999993
+        z: 0
+      DefaultRotationValue:
+        value:
+          x: 0
+          y: -0
+          z: -0
+          w: 1
+      DefaultScaleValue:
+        x: 1
+        y: 1
+        z: 1
+  m_InactiveTransformChannels: []
+  m_IntChannels: []
+  m_FloatChannels: []
+  m_QuaternionChannels: []
+  m_Root:
+    Path: Skeleton
