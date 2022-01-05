@@ -311,7 +311,7 @@ MonoBehaviour:
     x: -0
     y: -9.81
     z: -0
-  MovementSpeed: 3
+  MovementSpeed: 6
   MaxMovementSpeed: 10
   RotationSpeed: 2.5
   JumpUpwardsSpeed: 5

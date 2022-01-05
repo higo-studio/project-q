@@ -113,6 +113,23 @@ namespace Higo.Animation.Controller
             layerParamBuffer.Length = layerBuffer.Length;
             var stateParamBuffer = pcb.AddBuffer<AnimationControllerStateParamBuffer>(entity);
             stateParamBuffer.Length = stateBuffer.Length;
+            for (var i = 0; i < layerParamBuffer.Length; i++)
+            {
+                layerParamBuffer[i] = new AnimationControllerLayerParamBuffer()
+                {
+                    Weight = i == 0 ? 1 : 0
+                };
+            }
+
+            for (var i = 0; i < stateParamBuffer.Length; i++)
+            {
+                stateParamBuffer[i] = new AnimationControllerStateParamBuffer()
+                {
+                    Weight = i == 0 ? 1 : 0,
+                    ParamX = 0,
+                    ParamY = 0
+                };
+            }
             using (var builder = new BlobBuilder(Allocator.Temp))
             {
                 ref var nodeData = ref builder.ConstructRoot<AnimatorNodeData>();

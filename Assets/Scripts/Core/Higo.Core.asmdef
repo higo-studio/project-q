@@ -1,5 +1,6 @@
 {
     "name": "Higo.Core",
+    "rootNamespace": "",
     "references": [
         "GUID:d8b63aba1907145bea998dd612889d6b",
         "GUID:75469ad4d38634e559750d17036d5f7c",
@@ -16,7 +17,8 @@
         "GUID:3d581b522efa5ba499d64762a189f84c",
         "GUID:cb406e48efc9c46d9a3d4911ffbdecd7",
         "GUID:fc0f4f4008c73fe4fa2fb043629c96bb",
-        "GUID:44dcb2bf5b9be4b5aa76674c8edcd1d5"
+        "GUID:44dcb2bf5b9be4b5aa76674c8edcd1d5",
+        "GUID:1964b8c0ff7e547afb1f45df94ecd10f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
