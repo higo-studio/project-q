@@ -21,15 +21,12 @@ namespace Higo.Animation.Controller
         public StringHash Hash;
         public int ResourceId;
         public AnimationStateType Type;
-        public NodeHandle Node;
     }
 
     public struct AnimationLayerResource : IBufferElementData
     {
         public int StateCount;
         public int StateStartIndex;
-        public NodeHandle NMixerNode;
-        public NodeHandle WeightMaskNode;
         public int ChannelWeightTableCount;
         public BlobAssetReference<ChannelWeightTable> ChannelWeightTableRef;
     }
@@ -37,12 +34,11 @@ namespace Higo.Animation.Controller
     public struct AnimationControllerSystemStateGraphData : ISystemStateComponentData
     {
         public NodeHandle<ComponentNode> EntityNode;
-        public NodeHandle<ExtractAnimatorParametersNode> ParamNode; 
         public NodeHandle<ConvertDeltaTimeToFloatNode> DeltaTimeNode;
         public NodeHandle<TimeCounterNode> TimeCounterNode;
         public NodeHandle<TimeLoopNode> TimeLoopNode;
         public NodeHandle<FloatRcpNode> FloatRcpNode;
-        public NodeHandle<LayerMixerNode> LayerMixerNode;
+        public NodeHandle<AnimatorNode> AnimatorNode;
     }
 
     public struct AnimationControllerLayerParamBuffer : IBufferElementData
