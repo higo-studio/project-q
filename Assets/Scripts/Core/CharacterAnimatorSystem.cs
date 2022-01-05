@@ -29,7 +29,6 @@ public class CharacterAnimatorSystem : SystemBase
             if (!bufferFromEntity.HasComponent(render.Value)) return;
             var stateParamBuffer = bufferFromEntity[render.Value];
             var factory = cc.Movement.y * (cc.MovementSpeed / cc.MaxMovementSpeed);
-            UnityEngine.Debug.Log(factory);
             for (var i = 0; i < stateParamBuffer.Length; i++)
             {
                 ref var paramData = ref stateParamBuffer.ElementAt(i);
