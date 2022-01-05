@@ -96,7 +96,7 @@ public class InputSystem : ComponentSystem, InputActions.IPlayerActions
         }
 
         var input = default(PlayerInputComponent);
-        currentMovement = mathEx.SmoothDamp(currentMovement, m_movement, ref movementCurrentVelocity, 0.1f, Time.DeltaTime);
+        currentMovement = mathEx.SmoothDamp(currentMovement, m_movement, ref movementCurrentVelocity, 0.5f, Time.DeltaTime);
         if (math.EPSILON > math.abs(currentMovement.x)) currentMovement.x = 0;
         if (math.EPSILON > math.abs(currentMovement.y)) currentMovement.y = 0;
         input.Movement = currentMovement;
