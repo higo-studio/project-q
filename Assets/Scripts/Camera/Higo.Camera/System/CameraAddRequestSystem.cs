@@ -11,7 +11,6 @@ public class CameraAddRequestSystem : SystemBase
     {
         base.OnCreate();
         RequireSingletonForUpdate<NetworkIdComponent>();
-        RequireForUpdate(GetEntityQuery(ComponentType.ReadWrite<VirtualCameraComponent>()));
     }
 
     protected override void OnUpdate()
