@@ -21,12 +21,12 @@ public class CameraAddRequestSystem : SystemBase
             .WithNone<CameraActiveRequest, CameraActiveComponent>()
             .ForEach((Entity ent, in VirtualCameraComponent vcm, in Parent parent) =>
             {
-                var ownID = EntityManager.GetComponentData<GhostOwnerComponent>(parent.Value).NetworkId;
+                var ownID = GetComponent<GhostOwnerComponent>(parent.Value).NetworkId;
                 if(ownID == localID)
                 {
                     addCommand.AddComponent<CameraActiveRequest>(ent);
                 }
-            }).WithoutBurst().Run();
+            }).Run();
 
         Entities
             .WithAll<CameraBrainComponent, LocalToWorld, Translation>()
