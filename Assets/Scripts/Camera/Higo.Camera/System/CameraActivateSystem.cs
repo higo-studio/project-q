@@ -23,20 +23,20 @@ namespace Higo.Camera
                 .WithAll<CameraActiveRequest>()
                 .WithNone<CameraActiveComponent>()
                 .ForEach((Entity ent, in VirtualCameraComponent vcam) =>
-            {
-                if (vcam.Priority >= waitingMaxPriority)
                 {
-                    waiting = ent;
-                    waitingMaxPriority = vcam.Priority;
-                }
+                    if (vcam.Priority >= waitingMaxPriority)
+                    {
+                        waiting = ent;
+                        waitingMaxPriority = vcam.Priority;
+                    }
 
-                PostUpdateCommands.RemoveComponent<CameraActiveRequest>(ent);
-                PostUpdateCommands.AddComponent<CameraActiveComponent>(ent);
-                PostUpdateCommands.SetComponent(ent, new CameraActiveComponent()
-                {
-                    Value = CameraActiveState.Waiting
-                });
-            }).Run();
+                    PostUpdateCommands.RemoveComponent<CameraActiveRequest>(ent);
+                    PostUpdateCommands.AddComponent<CameraActiveComponent>(ent);
+                    PostUpdateCommands.SetComponent(ent, new CameraActiveComponent()
+                    {
+                        Value = CameraActiveState.Waiting
+                    });
+                }).Run();
 
             if (Entity.Null == brain.CurrentCamera && Entity.Null == waiting)
             {

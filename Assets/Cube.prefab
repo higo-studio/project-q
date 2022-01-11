@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8090396445762545689}
   - component: {fileID: 808101581410421974}
+  - component: {fileID: 5252703418739553288}
   m_Layer: 0
   m_Name: Player Camera
   m_TagString: Untagged
@@ -43,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4686fb883f8b3e4cbb0116dda232913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AutoActivate: 1
-  Priority: 0
+  AutoActivate: 0
+  Priority: 10
   Follow: {fileID: 5177885258673226676}
   LookAt: {fileID: 5177885258673226676}
   SplineCurvature: 0.2
@@ -77,6 +78,18 @@ MonoBehaviour:
     CurrentSpeed: 0
     Wrap: 0
     Inverse: 1
+--- !u!114 &5252703418739553288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2910722142939036148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f922032aad1e4f109e892944af196e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5177885258673226679
 GameObject:
   m_ObjectHideFlags: 0

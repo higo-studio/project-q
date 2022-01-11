@@ -4,6 +4,8 @@ using UnityEngine;
 using Unity.Collections;
 using Unity.Mathematics;
 using System.Runtime.CompilerServices;
+using Unity.NetCode;
+using Unity.Transforms;
 
 [assembly: InternalsVisibleTo("Higo.Camera.Editor")]
 namespace Higo.Camera
