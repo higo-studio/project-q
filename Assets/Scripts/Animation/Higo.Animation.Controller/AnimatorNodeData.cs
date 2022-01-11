@@ -72,6 +72,7 @@ namespace Higo.Animation.Controller
         public StringHash Hash;
         public AnimatorStateType Type;
         public AnimatorUntypeedRef ResourceRef;
+        public int IdInBuffer;
     }
 
     [BurstCompatible]
@@ -93,6 +94,7 @@ namespace Higo.Animation.Controller
         public StringHash Hash;
         public AnimatorStateType Type;
         public int ResourceId;
+        public int IdInBuffer;
     }
 
     [BurstCompatible]

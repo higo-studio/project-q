@@ -138,6 +138,7 @@ namespace Higo.Animation.Controller
                         ref var stateRaw = ref layerRaw.stateDatas[stateIdx];
                         state.Hash = stateRaw.Hash;
                         state.Type = stateRaw.Type;
+                        state.IdInBuffer = stateRaw.IdInBuffer;
                         switch (state.Type)
                         {
                             case AnimatorStateType.Clip:

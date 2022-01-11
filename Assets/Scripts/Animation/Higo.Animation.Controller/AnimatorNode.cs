@@ -112,7 +112,6 @@ namespace Higo.Animation.Controller
                 WeightBuilderHandlers = new List<NodeHandle<WeightBuilderNode>>(val.layerDatas.Length);
                 ClipOrTreeHandlers = new List<NodeHandle>(val.layerDatas.Length);
 
-                var stateBufferStartIdx = 0;
                 for (var layerIdx = 0; layerIdx < val.layerDatas.Length; layerIdx++)
                 {
                     ref var layer = ref val.layerDatas[layerIdx];
@@ -148,10 +147,10 @@ namespace Higo.Animation.Controller
                     }
                     for (var stateIdx = 0; stateIdx < stateCount; stateIdx++)
                     {
-                        var stateIdxInBuffer = stateBufferStartIdx + stateIdx;
+                        ref var state = ref layer.stateDatas[stateIdx];
+                        var stateIdxInBuffer = state.IdInBuffer;
                         set.Connect(ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateWeightsOutput, stateIdxInBuffer,
                             nmixer, NMixerNode.KernelPorts.Weights, stateIdx);
-                        ref var state = ref layer.stateDatas[stateIdx];
                         NodeHandle stateHandler = default;
                         if (state.Type == AnimatorStateType.Clip)
                         {
@@ -194,7 +193,6 @@ namespace Higo.Animation.Controller
                         }
                         ClipOrTreeHandlers.Add(stateHandler);
                     }
-                    stateBufferStartIdx += stateCount;
                 }
 
                 ctx.EmitMessage(SimulationPorts.RigOut, new Rig()

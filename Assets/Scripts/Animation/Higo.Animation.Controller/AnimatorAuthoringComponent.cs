@@ -60,12 +60,6 @@ namespace Higo.Animation.Controller
             new AnimationLayerAuthoring()
         };
 
-        public int TotalStateCount
-        {
-            get => Layers.Sum(layer => layer.states.Count);
-
-        }
-
         public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
         {
             dstManager.AddBuffer<AnimatorClipResource>(entity);
@@ -77,8 +71,8 @@ namespace Higo.Animation.Controller
             using (var builder = new BlobBuilder(Allocator.Temp))
             {
                 ref var root = ref builder.ConstructRoot<AnimatorNodeDataRaw>();
-                root.totalStateCount = TotalStateCount;
                 var layerDataArr = builder.Allocate(ref root.layerDatas, Layers.Count);
+                var stateIdGenerator = 0;
                 for (var layerIndex = 0; layerIndex < Layers.Count; layerIndex++)
                 {
                     var maskBuffer = dstManager.GetBuffer<AnimatorRigMaskResource>(entity);
@@ -149,10 +143,13 @@ namespace Higo.Animation.Controller
                         {
                             Hash = hash,
                             ResourceId = ResourceId,
-                            Type = type
+                            Type = type,
+                            IdInBuffer = stateIdGenerator++
                         };
                     }
                 }
+
+                root.totalStateCount = stateIdGenerator;
 
                 dstManager.AddComponentData(entity, new AnimatorSetup()
                 {
