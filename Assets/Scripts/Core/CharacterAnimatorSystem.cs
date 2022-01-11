@@ -23,7 +23,7 @@ public class CharacterAnimatorSystem : SystemBase
         // types you want.
 
 
-        var bufferFromEntity = GetBufferFromEntity<AnimationControllerStateParamBuffer>();
+        var bufferFromEntity = GetBufferFromEntity<AnimatorStateBuffer>();
         Entities.ForEach((in CharacterRenderStateComponent render, in CharacterControllerComponentData cc) =>
         {
             if (!bufferFromEntity.HasComponent(render.Value)) return;

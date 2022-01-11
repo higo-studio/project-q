@@ -7,85 +7,98 @@ using Unity.Animation;
 namespace Higo.Animation.Controller
 {
     [StructLayout(LayoutKind.Explicit, Size = 8)]
-    public struct BlendTree1DRef
+    public struct AnimatorUntypeedRef
     {
         [FieldOffset(0)]
         private long m_BlobAssetRefStorage;
-        public ref BlendTree1D Value => ref UnsafeUtility.As<long, BlobAssetReference<BlendTree1D>>(ref m_BlobAssetRefStorage).Value;
-        public static implicit operator BlendTree1DRef(BlobAssetReference<BlendTree1D> assetRef)
+        public ref T Value<T>() where T : struct => ref UnsafeUtility.As<long, BlobAssetReference<T>>(ref m_BlobAssetRefStorage).Value;
+        public static implicit operator AnimatorUntypeedRef(BlobAssetReference<BlendTree1D> assetRef)
         {
-            BlendTree1DRef ret = default;
+            AnimatorUntypeedRef ret = default;
             UnsafeUtility.As<long, BlobAssetReference<BlendTree1D>>(ref ret.m_BlobAssetRefStorage) = assetRef;
             return ret;
         }
 
-        public static implicit operator BlobAssetReference<BlendTree1D>(BlendTree1DRef refref)
+        public static implicit operator BlobAssetReference<BlendTree1D>(AnimatorUntypeedRef refref)
         {
             return UnsafeUtility.As<long, BlobAssetReference<BlendTree1D>>(ref refref.m_BlobAssetRefStorage);
         }
-    }
 
-    [StructLayout(LayoutKind.Explicit, Size = 8)]
-    public struct BlendTree2DSimpleDirectionalRef
-    {
-        [FieldOffset(0)]
-        private long m_BlobAssetRefStorage;
-        public ref BlendTree2DSimpleDirectional Value => ref UnsafeUtility.As<long, BlobAssetReference<BlendTree2DSimpleDirectional>>(ref m_BlobAssetRefStorage).Value;
-        public static implicit operator BlendTree2DSimpleDirectionalRef(BlobAssetReference<BlendTree2DSimpleDirectional> assetRef)
+        public static implicit operator AnimatorUntypeedRef(BlobAssetReference<BlendTree2DSimpleDirectional> assetRef)
         {
-            BlendTree2DSimpleDirectionalRef ret = default;
+            AnimatorUntypeedRef ret = default;
             UnsafeUtility.As<long, BlobAssetReference<BlendTree2DSimpleDirectional>>(ref ret.m_BlobAssetRefStorage) = assetRef;
             return ret;
         }
 
-        public static implicit operator BlobAssetReference<BlendTree2DSimpleDirectional>(BlendTree2DSimpleDirectionalRef refref)
+        public static implicit operator BlobAssetReference<BlendTree2DSimpleDirectional>(AnimatorUntypeedRef refref)
         {
             return UnsafeUtility.As<long, BlobAssetReference<BlendTree2DSimpleDirectional>>(ref refref.m_BlobAssetRefStorage);
         }
-    }
 
-    [StructLayout(LayoutKind.Explicit, Size = 8)]
-    public struct ChannelWeightTableRef
-    {
-        [FieldOffset(0)]
-        private long m_BlobAssetRefStorage;
-        public ref ChannelWeightTable Value => ref UnsafeUtility.As<long, BlobAssetReference<ChannelWeightTable>>(ref m_BlobAssetRefStorage).Value;
-        public static implicit operator ChannelWeightTableRef(BlobAssetReference<ChannelWeightTable> assetRef)
+        public static implicit operator AnimatorUntypeedRef(BlobAssetReference<ChannelWeightTable> assetRef)
         {
-            ChannelWeightTableRef ret = default;
+            AnimatorUntypeedRef ret = default;
             UnsafeUtility.As<long, BlobAssetReference<ChannelWeightTable>>(ref ret.m_BlobAssetRefStorage) = assetRef;
             return ret;
         }
 
-        public static implicit operator BlobAssetReference<ChannelWeightTable>(ChannelWeightTableRef refref)
+        public static implicit operator BlobAssetReference<ChannelWeightTable>(AnimatorUntypeedRef refref)
         {
             return UnsafeUtility.As<long, BlobAssetReference<ChannelWeightTable>>(ref refref.m_BlobAssetRefStorage);
         }
+
+        public static implicit operator AnimatorUntypeedRef(BlobAssetReference<Clip> assetRef)
+        {
+            AnimatorUntypeedRef ret = default;
+            UnsafeUtility.As<long, BlobAssetReference<Clip>>(ref ret.m_BlobAssetRefStorage) = assetRef;
+            return ret;
+        }
+
+        public static implicit operator BlobAssetReference<Clip>(AnimatorUntypeedRef clip)
+        {
+            return UnsafeUtility.As<long, BlobAssetReference<Clip>>(ref clip.m_BlobAssetRefStorage);
+        }
     }
 
-    public struct AnimatorNodeLayerData
+    public struct AnimatorLayerData
     {
-        public int StateCount;
-        public int StateStartIndex;
-        public int ChannelWeightTableCount;
-        public ChannelWeightTableRef ChannelWeightTableRef;
+        public AnimatorUntypeedRef ChannelWeightTableRef;
+        public BlobArray<AnimatorStateData> stateDatas;
+    }
 
-        public static implicit operator AnimatorNodeLayerData(AnimationLayerResource src) => new AnimatorNodeLayerData()
-        {
-            StateCount = src.StateCount,
-            StateStartIndex = src.StateStartIndex,
-            ChannelWeightTableCount = src.ChannelWeightTableCount,
-            ChannelWeightTableRef = src.ChannelWeightTableRef
-        };
+    public struct AnimatorStateData
+    {
+        public StringHash Hash;
+        public AnimatorStateType Type;
+        public AnimatorUntypeedRef ResourceRef;
     }
 
     [BurstCompatible]
     public struct AnimatorNodeData
     {
-        public BlobArray<BlendTree1DRef> blendTree1Ds;
-        public BlobArray<BlendTree2DSimpleDirectionalRef> blendTree2DSDs;
-        public BlobArray<Motion> motions;
-        public BlobArray<AnimatorNodeLayerData> layerDatas;
-        public BlobArray<AnimationStateResource> stateDatas;
+        public int totalStateCount;
+        public BlobArray<AnimatorLayerData> layerDatas;
+    }
+
+
+    public struct AnimatorLayerDataRaw
+    {
+        public int ResourceId;
+        public BlobArray<AnimatorStateDataRaw> stateDatas;
+    }
+
+    public struct AnimatorStateDataRaw
+    {
+        public StringHash Hash;
+        public AnimatorStateType Type;
+        public int ResourceId;
+    }
+
+    [BurstCompatible]
+    public struct AnimatorNodeDataRaw
+    {
+        public int totalStateCount;
+        public BlobArray<AnimatorLayerDataRaw> layerDatas;
     }
 }

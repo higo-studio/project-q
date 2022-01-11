@@ -294,6 +294,10 @@ MonoBehaviour:
       Weight: 0
     - Id: {fileID: 5209601721158307153}
       Weight: 0
+    - Id: {fileID: 6061709610411799406}
+      Weight: 0
+    - Id: {fileID: 6628006884738660600}
+      Weight: 0
     states:
     - Type: 0
       Motion: {fileID: 7400000, guid: 1de0829d5c0b4174486a2fbb17e9805a, type: 2}

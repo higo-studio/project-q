@@ -6,57 +6,44 @@ using Higo.Animation;
 using Unity.Collections.LowLevel;
 namespace Higo.Animation.Controller
 {
-    public enum AnimationStateType
+    public enum AnimatorStateType
     {
         Clip, Blend1D, Blend2D
     }
-    public struct ClipResource : IBufferElementData
+    public struct AnimatorClipResource : IBufferElementData
     {
         public float MotionSpeed;
-        public BlobAssetReference<Unity.Animation.Clip> Motion;
+        public BlobAssetReference<Unity.Animation.Clip> ValueRef;
     }
 
-    public struct AnimationStateResource : IBufferElementData
+    public struct AnimatorRigMaskResource : IBufferElementData
     {
-        public StringHash Hash;
-        public int ResourceId;
-        public AnimationStateType Type;
+        public BlobAssetReference<ChannelWeightTable> ValueRef;
+        public int EntryCount;
     }
 
-    public struct AnimationLayerResource : IBufferElementData
+    public struct AnimatorSetup : IComponentData
     {
-        public int StateCount;
-        public int StateStartIndex;
-        public int ChannelWeightTableCount;
-        public BlobAssetReference<ChannelWeightTable> ChannelWeightTableRef;
+        public BlobAssetReference<AnimatorNodeDataRaw> ValueRef;
     }
 
-    public struct AnimationControllerSystemStateGraphData : ISystemStateComponentData
+    public struct AnimatorGraphData : ISystemStateComponentData
     {
         public NodeHandle<ComponentNode> EntityNode;
-        public NodeHandle<ConvertDeltaTimeToFloatNode> DeltaTimeNode;
-        public NodeHandle<TimeCounterNode> TimeCounterNode;
-        public NodeHandle<TimeLoopNode> TimeLoopNode;
-        public NodeHandle<FloatRcpNode> FloatRcpNode;
         public NodeHandle<AnimatorNode> AnimatorNode;
+        public GraphValueArray<float> SpeedGraphValueArray;
     }
 
-    public struct AnimationControllerLayerParamBuffer : IBufferElementData
+    public struct AnimatorLayerBuffer : IBufferElementData
     {
         public float Weight;
     }
 
-    public struct AnimationControllerStateParamBuffer : IBufferElementData
+    public struct AnimatorStateBuffer : IBufferElementData
     {
+        public float Time;
         public float Weight;
         public float ParamX;
         public float ParamY;
     }
-
-    // public struct AnimatorBlob
-    // {
-    //     public BlobArray<BlendTree1D> blend1Ds;
-    //     public BlobArray<BlendTree2DSimpleDirectional> blend2Ds;
-    //     public BlobArray<Clip> clips;
-    // }
 }

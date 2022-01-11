@@ -1,99 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-550221905675636932
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3210868579716262020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9aea18a9fecfd504ba1a9c0f8ebcb60a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Version: 1
-  Bones:
-  - {fileID: 6628006884738660600}
-  - {fileID: 6236932233965326570}
-  - {fileID: 752640013114577410}
-  - {fileID: 2010993515481899067}
-  - {fileID: 5097330601202799798}
-  - {fileID: 3125013412838807077}
-  - {fileID: 3592271447136626183}
-  - {fileID: 418859842977754906}
-  - {fileID: 5209601721158307153}
-  - {fileID: 6061709610411799406}
-  - {fileID: 1430550442692690474}
-  - {fileID: 3855807056088702476}
-  - {fileID: 5670488161767089098}
-  - {fileID: 7526592938648761593}
-  - {fileID: 5098279737061633308}
-  - {fileID: 6768296708354752332}
-  - {fileID: 3509689537137456684}
-  - {fileID: 7330772139839573209}
-  - {fileID: 3319445688315408897}
-  - {fileID: 5475978528254780711}
-  m_ExcludeBones: []
-  m_InvalidBones: []
-  m_SkeletonRootBone: {fileID: 6628006884738660600}
-  TranslationChannels: []
-  RotationChannels: []
-  ScaleChannels: []
-  FloatChannels: []
-  IntChannels: []
---- !u!114 &1018371516404455763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3210868579716262020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 976bc915caa8c684d9a55b4a68484c7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Clip: {fileID: 0}
---- !u!114 &1420532749784180655
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3210868579716262020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d52c1de4f76b1545946555cfe16e162, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RenderBones: 1
-  BoneShape: 0
-  Color: {r: 0.9528302, g: 0.25768355, b: 0.34535253, a: 1}
-  Size: 1
-  BoneMaterial: {fileID: 0}
-  RigComponent: {fileID: 0}
-  Transforms:
-  - {fileID: 6628006884738660600}
-  - {fileID: 6236932233965326570}
-  - {fileID: 752640013114577410}
-  - {fileID: 2010993515481899067}
-  - {fileID: 5097330601202799798}
-  - {fileID: 3125013412838807077}
-  - {fileID: 3592271447136626183}
-  - {fileID: 418859842977754906}
-  - {fileID: 5209601721158307153}
-  - {fileID: 6061709610411799406}
-  - {fileID: 1430550442692690474}
-  - {fileID: 3855807056088702476}
-  - {fileID: 5670488161767089098}
-  - {fileID: 7526592938648761593}
-  - {fileID: 5098279737061633308}
-  - {fileID: 6768296708354752332}
-  - {fileID: 3509689537137456684}
-  - {fileID: 7330772139839573209}
-  - {fileID: 3319445688315408897}
-  - {fileID: 5475978528254780711}
 --- !u!1001 &2327835612565886421
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -261,3 +167,97 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7759903723462373618, guid: 350bd1f380213c9408cd947db49e27e4, type: 3}
   m_PrefabInstance: {fileID: 2327835612565886421}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &-550221905675636932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3210868579716262020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aea18a9fecfd504ba1a9c0f8ebcb60a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  Bones:
+  - {fileID: 6628006884738660600}
+  - {fileID: 6236932233965326570}
+  - {fileID: 752640013114577410}
+  - {fileID: 2010993515481899067}
+  - {fileID: 5097330601202799798}
+  - {fileID: 3125013412838807077}
+  - {fileID: 3592271447136626183}
+  - {fileID: 418859842977754906}
+  - {fileID: 5209601721158307153}
+  - {fileID: 6061709610411799406}
+  - {fileID: 1430550442692690474}
+  - {fileID: 3855807056088702476}
+  - {fileID: 5670488161767089098}
+  - {fileID: 7526592938648761593}
+  - {fileID: 5098279737061633308}
+  - {fileID: 6768296708354752332}
+  - {fileID: 3509689537137456684}
+  - {fileID: 7330772139839573209}
+  - {fileID: 3319445688315408897}
+  - {fileID: 5475978528254780711}
+  m_ExcludeBones: []
+  m_InvalidBones: []
+  m_SkeletonRootBone: {fileID: 6628006884738660600}
+  TranslationChannels: []
+  RotationChannels: []
+  ScaleChannels: []
+  FloatChannels: []
+  IntChannels: []
+--- !u!114 &1018371516404455763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3210868579716262020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 976bc915caa8c684d9a55b4a68484c7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Clip: {fileID: 0}
+--- !u!114 &1420532749784180655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3210868579716262020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d52c1de4f76b1545946555cfe16e162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RenderBones: 1
+  BoneShape: 0
+  Color: {r: 0.9528302, g: 0.25768355, b: 0.34535253, a: 1}
+  Size: 1
+  BoneMaterial: {fileID: 0}
+  RigComponent: {fileID: 0}
+  Transforms:
+  - {fileID: 6628006884738660600}
+  - {fileID: 6236932233965326570}
+  - {fileID: 752640013114577410}
+  - {fileID: 2010993515481899067}
+  - {fileID: 5097330601202799798}
+  - {fileID: 3125013412838807077}
+  - {fileID: 3592271447136626183}
+  - {fileID: 418859842977754906}
+  - {fileID: 5209601721158307153}
+  - {fileID: 6061709610411799406}
+  - {fileID: 1430550442692690474}
+  - {fileID: 3855807056088702476}
+  - {fileID: 5670488161767089098}
+  - {fileID: 7526592938648761593}
+  - {fileID: 5098279737061633308}
+  - {fileID: 6768296708354752332}
+  - {fileID: 3509689537137456684}
+  - {fileID: 7330772139839573209}
+  - {fileID: 3319445688315408897}
+  - {fileID: 5475978528254780711}

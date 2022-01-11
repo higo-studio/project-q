@@ -7,6 +7,7 @@ using Unity.Entities;
 using Unity.Burst;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using System.Diagnostics;
 
 namespace Higo.Animation.Controller
 {
@@ -23,10 +24,7 @@ namespace Higo.Animation.Controller
             public MessageInput<AnimatorNode, BlobAssetReference<AnimatorNodeData>> NodeData;
             public MessageInput<AnimatorNode, Rig> Rig;
             public MessageOutput<AnimatorNode, Rig> RigOut;
-
-            internal PortArray<MessageOutput<AnimatorNode, BlobAssetReference<Clip>>> m_outClips;
-            internal PortArray<MessageOutput<AnimatorNode, BlobAssetReference<BlendTree1D>>> m_outBlendTree1Ds;
-            internal PortArray<MessageOutput<AnimatorNode, BlobAssetReference<BlendTree2DSimpleDirectional>>> m_outBlendTree2Ds;
+            public MessageOutput<AnimatorNode, BlobAssetReference<Clip>> FirstClip;
             internal MessageOutput<AnimatorNode, float> m_outOneFloat;
             internal PortArray<MessageOutput<AnimatorNode, int>> m_outIndics;
             internal PortArray<MessageOutput<AnimatorNode, int>> m_outWeights;
@@ -34,12 +32,12 @@ namespace Higo.Animation.Controller
         }
 
         [Managed]
-        internal struct Data : INodeData, IInit, IDestroy, IMsgHandler<Rig>, IMsgHandler<BlobAssetReference<AnimatorNodeData>>
+        internal struct Data : INodeData, IInit, IDestroy, IMsgHandler<Rig>,
+            IMsgHandler<BlobAssetReference<AnimatorNodeData>>, IMsgHandler<BlobAssetReference<Clip>>
         {
             internal BlobAssetReference<RigDefinition> m_RigDefinition;
             NodeHandle<LayerMixerNode> LayerMixerHandler;
-            NodeHandle<KernelPassThroughNodeFloat> m_TimePassThrough;
-            NodeHandle<KernelPassThroughNodeFloat> m_DeltaTimePassThrough;
+            NodeHandle<KernelPassThroughArrayFloat> SpeedPassThrough;
             List<NodeHandle<NMixerNode>> NMixerHandlers;
             List<NodeHandle<WeightBuilderNode>> WeightBuilderHandlers;
             List<NodeHandle> ClipOrTreeHandlers;
@@ -51,14 +49,10 @@ namespace Higo.Animation.Controller
                 var set = ctx.Set;
                 var thisHandle = set.CastHandle<AnimatorNode>(ctx.Handle);
                 LayerMixerHandler = set.Create<LayerMixerNode>();
+                SpeedPassThrough = set.Create<KernelPassThroughArrayFloat>();
                 set.Connect(thisHandle, SimulationPorts.RigOut, LayerMixerHandler, LayerMixerNode.SimulationPorts.Rig);
                 ctx.ForwardOutput(KernelPorts.Output, LayerMixerHandler, LayerMixerNode.KernelPorts.Output);
-
-                m_TimePassThrough = set.Create<KernelPassThroughNodeFloat>();
-                ctx.ForwardInput(KernelPorts.Time, m_TimePassThrough, KernelPassThroughNodeFloat.KernelPorts.Input);
-
-                m_DeltaTimePassThrough = set.Create<KernelPassThroughNodeFloat>();
-                ctx.ForwardInput(KernelPorts.DeltaTime, m_DeltaTimePassThrough, KernelPassThroughNodeFloat.KernelPorts.Input);
+                ctx.ForwardOutput(KernelPorts.SpeedBufferOutput, SpeedPassThrough, KernelPassThroughArrayFloat.KernelPorts.Output);
 
                 ParamNode = set.Create<ExtractAnimatorParametersNode>();
                 ctx.ForwardInput(KernelPorts.LayerBufferInput, ParamNode, ExtractAnimatorParametersNode.KernelPorts.LayerBufferInput);
@@ -68,8 +62,8 @@ namespace Higo.Animation.Controller
             public void Destroy(DestroyContext ctx)
             {
                 ctx.Set.Destroy(LayerMixerHandler);
-                ctx.Set.Destroy(m_TimePassThrough);
                 ctx.Set.Destroy(ParamNode);
+                ctx.Set.Destroy(SpeedPassThrough);
                 foreach (var handler in NMixerHandlers)
                 {
                     ctx.Set.Destroy(handler);
@@ -102,32 +96,30 @@ namespace Higo.Animation.Controller
                 var set = ctx.Set;
                 var thisHandle = set.CastHandle<AnimatorNode>(ctx.Handle);
 
-                set.SetPortArraySize(thisHandle, SimulationPorts.m_outBlendTree1Ds, val.blendTree1Ds.Length);
-                set.SetPortArraySize(thisHandle, SimulationPorts.m_outBlendTree2Ds, val.blendTree2DSDs.Length);
-                set.SetPortArraySize(thisHandle, SimulationPorts.m_outClips, val.motions.Length);
-
                 set.Connect(thisHandle, SimulationPorts.m_outLayerCount, LayerMixerHandler, LayerMixerNode.SimulationPorts.LayerCount);
                 ctx.EmitMessage(SimulationPorts.m_outLayerCount, (ushort)val.layerDatas.Length);
 
                 set.SetPortArraySize(ParamNode, ExtractAnimatorParametersNode.KernelPorts.LayerWeightsOutput, val.layerDatas.Length);
-                var stateCount = 0;
-                for (var layerIdx = 0; layerIdx < val.layerDatas.Length; layerIdx++)
-                {
-                    stateCount += val.layerDatas[layerIdx].StateCount;
-                }
-                set.SetPortArraySize(ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateWeightsOutput, stateCount);
-                set.SetPortArraySize(ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateParamXsOutput, stateCount);
-                set.SetPortArraySize(ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateParamYsOutput, stateCount);
+                var totalStateCount = val.totalStateCount;
+                set.SetPortArraySize(ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateWeightsOutput, totalStateCount);
+                set.SetPortArraySize(ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateParamXsOutput, totalStateCount);
+                set.SetPortArraySize(ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateParamYsOutput, totalStateCount);
+                set.SetPortArraySize(ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateTimesOutput, totalStateCount);
+                set.SetPortArraySize(SpeedPassThrough, KernelPassThroughArrayFloat.KernelPorts.Input, totalStateCount);
+                set.SetPortArraySize(SpeedPassThrough, KernelPassThroughArrayFloat.KernelPorts.Output, totalStateCount);
 
                 NMixerHandlers = new List<NodeHandle<NMixerNode>>(val.layerDatas.Length);
                 WeightBuilderHandlers = new List<NodeHandle<WeightBuilderNode>>(val.layerDatas.Length);
                 ClipOrTreeHandlers = new List<NodeHandle>(val.layerDatas.Length);
+
+                var stateBufferStartIdx = 0;
                 for (var layerIdx = 0; layerIdx < val.layerDatas.Length; layerIdx++)
                 {
                     ref var layer = ref val.layerDatas[layerIdx];
+                    var stateCount = layer.stateDatas.Length;
                     var nmixer = set.Create<NMixerNode>();
-                    set.SetPortArraySize(nmixer, NMixerNode.KernelPorts.Inputs, layer.StateCount);
-                    set.SetPortArraySize(nmixer, NMixerNode.KernelPorts.Weights, layer.StateCount);
+                    set.SetPortArraySize(nmixer, NMixerNode.KernelPorts.Inputs, stateCount);
+                    set.SetPortArraySize(nmixer, NMixerNode.KernelPorts.Weights, stateCount);
 
                     set.Connect(thisHandle, SimulationPorts.RigOut, nmixer, NMixerNode.SimulationPorts.Rig);
                     set.Connect(
@@ -137,10 +129,11 @@ namespace Higo.Animation.Controller
                     set.Connect(ParamNode, ExtractAnimatorParametersNode.KernelPorts.LayerWeightsOutput, layerIdx,
                         LayerMixerHandler, LayerMixerNode.KernelPorts.Weights, layerIdx);
 
-                    if (layer.ChannelWeightTableCount > 0)
+                    BlobAssetReference<ChannelWeightTable> TypedWeightRef = layer.ChannelWeightTableRef;
+                    if (TypedWeightRef.IsCreated)
                     {
                         var weightMasker = set.Create<WeightBuilderNode>();
-                        ref var weightEntrys = ref layer.ChannelWeightTableRef.Value.Weights;
+                        ref var weightEntrys = ref TypedWeightRef.Value.Weights;
                         set.SetPortArraySize(weightMasker, WeightBuilderNode.KernelPorts.ChannelIndices, weightEntrys.Length);
                         set.SetPortArraySize(weightMasker, WeightBuilderNode.KernelPorts.ChannelWeights, weightEntrys.Length);
                         set.Connect(thisHandle, SimulationPorts.m_outOneFloat, weightMasker, WeightBuilderNode.KernelPorts.DefaultWeight);
@@ -153,54 +146,55 @@ namespace Higo.Animation.Controller
                         set.Connect(weightMasker, WeightBuilderNode.KernelPorts.Output, LayerMixerHandler, LayerMixerNode.KernelPorts.WeightMasks, layerIdx);
                         WeightBuilderHandlers.Add(weightMasker);
                     }
-                    for (var stateIdx = 0; stateIdx < layer.StateCount; stateIdx++)
+                    for (var stateIdx = 0; stateIdx < stateCount; stateIdx++)
                     {
-                        var stateIdxInBuffer = layer.StateStartIndex + stateIdx;
+                        var stateIdxInBuffer = stateBufferStartIdx + stateIdx;
                         set.Connect(ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateWeightsOutput, stateIdxInBuffer,
                             nmixer, NMixerNode.KernelPorts.Weights, stateIdx);
-                        ref var state = ref val.stateDatas[stateIdxInBuffer];
+                        ref var state = ref layer.stateDatas[stateIdx];
                         NodeHandle stateHandler = default;
-                        if (state.Type == AnimationStateType.Clip)
+                        if (state.Type == AnimatorStateType.Clip)
                         {
                             var handler = set.Create<UberClipNode>();
-                            set.Connect(thisHandle, SimulationPorts.RigOut, handler, UberClipNode.SimulationPorts.Rig);
-                            set.Connect(thisHandle, SimulationPorts.m_outClips, state.ResourceId, handler, UberClipNode.SimulationPorts.Clip);
-                            set.Connect(m_TimePassThrough, KernelPassThroughNodeFloat.KernelPorts.Output, handler, UberClipNode.KernelPorts.Time);
-                            set.Connect(handler, UberClipNode.KernelPorts.Output, nmixer, NMixerNode.KernelPorts.Inputs, stateIdx);
 
+                            set.Connect(thisHandle, SimulationPorts.RigOut, handler, UberClipNode.SimulationPorts.Rig);
+                            set.Connect(handler, UberClipNode.KernelPorts.Output, nmixer, NMixerNode.KernelPorts.Inputs, stateIdx);
+                            set.Connect(ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateTimesOutput, stateIdxInBuffer, handler, UberClipNode.KernelPorts.Time);
+                            set.SendMessage(handler, UberClipNode.SimulationPorts.Clip, state.ResourceRef);
+                            set.SetData(SpeedPassThrough, KernelPassThroughArrayFloat.KernelPorts.Input, stateIdxInBuffer, 1f);
                             stateHandler = handler;
-                            ctx.EmitMessage(SimulationPorts.m_outClips, state.ResourceId, val.motions[state.ResourceId]);
+
                         }
-                        else if (state.Type == AnimationStateType.Blend1D)
+                        else if (state.Type == AnimatorStateType.Blend1D)
                         {
                             var handler = set.Create<UpBlendTree1DNode>();
                             set.Connect(thisHandle, SimulationPorts.RigOut, handler, UpBlendTree1DNode.SimulationPorts.Rig);
-                            set.Connect(thisHandle, SimulationPorts.m_outBlendTree1Ds, state.ResourceId, handler, UpBlendTree1DNode.SimulationPorts.BlendTree);
-                            set.Connect(m_DeltaTimePassThrough, KernelPassThroughNodeFloat.KernelPorts.Output, handler, UpBlendTree1DNode.KernelPorts.DeltaTime);
                             set.Connect(handler, UpBlendTree1DNode.KernelPorts.Output, nmixer, NMixerNode.KernelPorts.Inputs, stateIdx);
                             set.Connect(ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateParamXsOutput, stateIdxInBuffer,
                                 handler, UpBlendTree1DNode.KernelPorts.BlendValue);
+                            set.Connect(ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateTimesOutput, stateIdxInBuffer, handler, UpBlendTree1DNode.KernelPorts.Time);
+                            set.Connect(handler, UpBlendTree1DNode.KernelPorts.OutputSpeed, SpeedPassThrough, KernelPassThroughArrayFloat.KernelPorts.Input, stateIdxInBuffer);
 
                             stateHandler = handler;
-                            ctx.EmitMessage(SimulationPorts.m_outBlendTree1Ds, state.ResourceId, val.blendTree1Ds[state.ResourceId]);
+                            set.SendMessage(handler, UpBlendTree1DNode.SimulationPorts.BlendTree, state.ResourceRef);
                         }
-                        else if (state.Type == AnimationStateType.Blend2D)
+                        else if (state.Type == AnimatorStateType.Blend2D)
                         {
                             var handler = set.Create<UpBlendTree2DNode>();
                             set.Connect(thisHandle, SimulationPorts.RigOut, handler, UpBlendTree2DNode.SimulationPorts.Rig);
-                            set.Connect(thisHandle, SimulationPorts.m_outBlendTree2Ds, state.ResourceId, handler, UpBlendTree2DNode.SimulationPorts.BlendTree);
-                            set.Connect(m_DeltaTimePassThrough, KernelPassThroughNodeFloat.KernelPorts.Output, handler, UpBlendTree2DNode.KernelPorts.DeltaTime);
                             set.Connect(handler, UpBlendTree2DNode.KernelPorts.Output, nmixer, NMixerNode.KernelPorts.Inputs, stateIdx);
                             set.Connect(ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateParamXsOutput, stateIdxInBuffer,
                                 handler, UpBlendTree2DNode.KernelPorts.BlendValueX);
                             set.Connect(ParamNode, ExtractAnimatorParametersNode.KernelPorts.StateParamYsOutput, stateIdxInBuffer,
                                 handler, UpBlendTree2DNode.KernelPorts.BlendValueY);
+                            set.Connect(handler, UpBlendTree2DNode.KernelPorts.OutputSpeed, SpeedPassThrough, KernelPassThroughArrayFloat.KernelPorts.Input, stateIdxInBuffer);
 
                             stateHandler = handler;
-                            ctx.EmitMessage(SimulationPorts.m_outBlendTree2Ds, state.ResourceId, val.blendTree2DSDs[state.ResourceId]);
+                            set.SendMessage(handler, UpBlendTree2DNode.SimulationPorts.BlendTree, state.ResourceRef);
                         }
                         ClipOrTreeHandlers.Add(stateHandler);
                     }
+                    stateBufferStartIdx += stateCount;
                 }
 
                 ctx.EmitMessage(SimulationPorts.RigOut, new Rig()
@@ -210,16 +204,19 @@ namespace Higo.Animation.Controller
 
                 ctx.EmitMessage(SimulationPorts.m_outOneFloat, 1f);
             }
+
+            public void HandleMessage(MessageContext ctx, in BlobAssetReference<Clip> msg)
+            {
+            }
         }
 
         public struct KernelDefs : IKernelPortDefinition
         {
-            public DataInput<AnimatorNode, float> Time;
-            public DataInput<AnimatorNode, float> DeltaTime;
-            public DataInput<AnimatorNode, Buffer<AnimationControllerLayerParamBuffer>> LayerBufferInput;
-            public DataInput<AnimatorNode, Buffer<AnimationControllerStateParamBuffer>> StateBufferInput;
+            public DataInput<AnimatorNode, Buffer<AnimatorLayerBuffer>> LayerBufferInput;
+            public DataInput<AnimatorNode, Buffer<AnimatorStateBuffer>> StateBufferInput;
 
             public DataOutput<AnimatorNode, Buffer<AnimatedData>> Output;
+            public PortArray<DataOutput<AnimatorNode, float>> SpeedBufferOutput;
         }
 
         struct KernelData : IKernelData
@@ -238,12 +235,13 @@ namespace Higo.Animation.Controller
     {
         public struct KernelDefs : IKernelPortDefinition
         {
-            public DataInput<ExtractAnimatorParametersNode, Buffer<AnimationControllerLayerParamBuffer>> LayerBufferInput;
-            public DataInput<ExtractAnimatorParametersNode, Buffer<AnimationControllerStateParamBuffer>> StateBufferInput;
+            public DataInput<ExtractAnimatorParametersNode, Buffer<AnimatorLayerBuffer>> LayerBufferInput;
+            public DataInput<ExtractAnimatorParametersNode, Buffer<AnimatorStateBuffer>> StateBufferInput;
             public PortArray<DataOutput<ExtractAnimatorParametersNode, float>> LayerWeightsOutput;
             public PortArray<DataOutput<ExtractAnimatorParametersNode, float>> StateWeightsOutput;
             public PortArray<DataOutput<ExtractAnimatorParametersNode, float>> StateParamXsOutput;
             public PortArray<DataOutput<ExtractAnimatorParametersNode, float>> StateParamYsOutput;
+            public PortArray<DataOutput<ExtractAnimatorParametersNode, float>> StateTimesOutput;
         }
 
         struct KernelData : IKernelData
@@ -266,14 +264,53 @@ namespace Higo.Animation.Controller
                 var stateWeightArr = ctx.Resolve(ref ports.StateWeightsOutput);
                 var stateParamXArr = ctx.Resolve(ref ports.StateParamXsOutput);
                 var stateParamYArr = ctx.Resolve(ref ports.StateParamYsOutput);
+                var stateTime = ctx.Resolve(ref ports.StateTimesOutput);
                 var statebuffer = ctx.Resolve(ports.StateBufferInput);
                 for (var i = 0; i < stateWeightArr.Length; i++)
                 {
                     stateWeightArr[i] = statebuffer[i].Weight;
                     stateParamXArr[i] = statebuffer[i].ParamX;
                     stateParamYArr[i] = statebuffer[i].ParamY;
+                    stateTime[i] = statebuffer[i].Time;
                 }
             }
+        }
+    }
+
+    public class KernelPassThroughArrayFloat
+    : KernelNodeDefinition<KernelPassThroughArrayFloat.KernelDefs>
+    {
+        public struct KernelDefs : IKernelPortDefinition
+        {
+            public PortArray<DataInput<KernelPassThroughArrayFloat, float>> Input;
+            public PortArray<DataOutput<KernelPassThroughArrayFloat, float>> Output;
+        }
+
+        struct KernelData : IKernelData
+        {
+        }
+
+        [BurstCompile]
+        struct Kernel : IGraphKernel<KernelData, KernelDefs>
+        {
+            public void Execute(RenderContext ctx, in KernelData data, ref KernelDefs ports)
+            {
+                var inputs = ctx.Resolve(ports.Input);
+                var outputs = ctx.Resolve(ref ports.Output);
+
+                ValidateBufferLengthsAreEqual(inputs.Length, outputs.Length);
+                for (var i = 0; i < inputs.Length; i++)
+                {
+                    outputs[i] = inputs[i];
+                }
+            }
+        }
+
+        [Conditional("ENABLE_UNITY_COLLECTIONS_CHECKS")]
+        internal static void ValidateBufferLengthsAreEqual(int expected, int value)
+        {
+            if (expected != value)
+                throw new System.InvalidOperationException($"Buffer length must match: '{expected}' and '{value}'.");
         }
     }
 }
