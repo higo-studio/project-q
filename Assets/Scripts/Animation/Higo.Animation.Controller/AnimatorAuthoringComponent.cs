@@ -23,6 +23,7 @@ namespace Higo.Animation.Controller
         public AnimationClip Motion;
         public BlendTree Tree;
         public float Speed = 1;
+        public List<AnimatorTransitionInfo> TransitionInfos;
     }
 
     [Serializable]
@@ -70,7 +71,7 @@ namespace Higo.Animation.Controller
 
             using (var builder = new BlobBuilder(Allocator.Temp))
             {
-                ref var root = ref builder.ConstructRoot<AnimatorNodeDataRaw>();
+                ref var root = ref builder.ConstructRoot<AnimatorNodeData>();
                 var layerDataArr = builder.Allocate(ref root.layerDatas, Layers.Count);
                 var stateIdGenerator = 0;
                 for (var layerIndex = 0; layerIndex < Layers.Count; layerIndex++)
@@ -107,19 +108,23 @@ namespace Higo.Animation.Controller
                     {
                         var state = layer.states[stateIdx];
                         StringHash hash = default;
-                        int ResourceId = -1;
+                        int resourceId = -1;
+                        var duration = 1f;
                         AnimatorStateType type = default;
                         if (state.Type == AnimationStateAuthoringType.Clip)
                         {
                             var clipBuffer = dstManager.GetBuffer<AnimatorClipResource>(entity);
                             conversionSystem.DeclareAssetDependency(gameObject, state.Motion);
-                            ResourceId = clipBuffer.Add(new AnimatorClipResource()
+
+                            var valueRef = conversionSystem.BlobAssetStore.GetClip(state.Motion);
+                            resourceId = clipBuffer.Add(new AnimatorClipResource()
                             {
                                 MotionSpeed = state.Speed,
-                                ValueRef = conversionSystem.BlobAssetStore.GetClip(state.Motion)
+                                ValueRef = valueRef
                             });
                             type = AnimatorStateType.Clip;
                             hash = new StringHash(state.Motion.name);
+                            duration = valueRef.Value.Duration;
                         }
                         else if (state.Type == AnimationStateAuthoringType.BlendTree)
                         {
@@ -128,23 +133,24 @@ namespace Higo.Animation.Controller
                             if (state.Tree.blendType == BlendTreeType.Simple1D)
                             {
                                 var bakeOptions = new BakeOptions { RigDefinition = rig.Value, ClipConfiguration = clipConfiguration, SampleRate = 60.0f };
-                                ResourceId = BlendTreeConversion.Convert(state.Tree, entity, dstManager, bakeOptions);
+                                resourceId = BlendTreeConversion.Convert(state.Tree, entity, dstManager, bakeOptions);
                             }
                             else
                             {
                                 var bakeOptions = new BakeOptions { RigDefinition = rig.Value, SampleRate = 60.0f };
-                                ResourceId = BlendTreeConversion.Convert(state.Tree, entity, dstManager, bakeOptions);
+                                resourceId = BlendTreeConversion.Convert(state.Tree, entity, dstManager, bakeOptions);
                             }
 
                             type = state.Tree.blendType == BlendTreeType.Simple1D ? AnimatorStateType.Blend1D : AnimatorStateType.Blend2D;
                             hash = new StringHash(state.Tree.name);
                         }
-                        stateDataArr[stateIdx] = new AnimatorStateDataRaw()
+                        stateDataArr[stateIdx] = new AnimatorStateData()
                         {
                             Hash = hash,
-                            ResourceId = ResourceId,
+                            ResourceId = resourceId,
                             Type = type,
-                            IdInBuffer = stateIdGenerator++
+                            IdInBuffer = stateIdGenerator++,
+                            Duration = duration
                         };
                     }
                 }
@@ -153,7 +159,7 @@ namespace Higo.Animation.Controller
 
                 dstManager.AddComponentData(entity, new AnimatorSetup()
                 {
-                    ValueRef = builder.CreateBlobAssetReference<AnimatorNodeDataRaw>(Allocator.Persistent)
+                    ValueRef = builder.CreateBlobAssetReference<AnimatorNodeData>(Allocator.Persistent)
                 });
             }
         }

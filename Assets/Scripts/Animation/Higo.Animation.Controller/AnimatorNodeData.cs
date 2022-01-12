@@ -3,6 +3,7 @@ using Unity.Entities;
 using System.Runtime.InteropServices;
 using Unity.Collections;
 using Unity.Animation;
+using System;
 
 namespace Higo.Animation.Controller
 {
@@ -63,6 +64,7 @@ namespace Higo.Animation.Controller
 
     public struct AnimatorLayerData
     {
+        public int ResourceId;
         public AnimatorUntypeedRef ChannelWeightTableRef;
         public BlobArray<AnimatorStateData> stateDatas;
     }
@@ -72,7 +74,19 @@ namespace Higo.Animation.Controller
         public StringHash Hash;
         public AnimatorStateType Type;
         public AnimatorUntypeedRef ResourceRef;
+        public int ResourceId;
         public int IdInBuffer;
+        public float Duration;
+        public BlobArray<AnimatorTransitionInfo> transitionInfos;
+    }
+
+    [Serializable]
+    public struct AnimatorTransitionInfo
+    {
+        public float NextStateIndex;
+        public float ExitTime;
+        public float TransitionTime;
+        public float EnterTime;
     }
 
     [BurstCompatible]
@@ -80,27 +94,5 @@ namespace Higo.Animation.Controller
     {
         public int totalStateCount;
         public BlobArray<AnimatorLayerData> layerDatas;
-    }
-
-
-    public struct AnimatorLayerDataRaw
-    {
-        public int ResourceId;
-        public BlobArray<AnimatorStateDataRaw> stateDatas;
-    }
-
-    public struct AnimatorStateDataRaw
-    {
-        public StringHash Hash;
-        public AnimatorStateType Type;
-        public int ResourceId;
-        public int IdInBuffer;
-    }
-
-    [BurstCompatible]
-    public struct AnimatorNodeDataRaw
-    {
-        public int totalStateCount;
-        public BlobArray<AnimatorLayerDataRaw> layerDatas;
     }
 }

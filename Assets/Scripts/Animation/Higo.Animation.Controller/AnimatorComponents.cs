@@ -24,7 +24,7 @@ namespace Higo.Animation.Controller
 
     public struct AnimatorSetup : IComponentData
     {
-        public BlobAssetReference<AnimatorNodeDataRaw> ValueRef;
+        public BlobAssetReference<AnimatorNodeData> ValueRef;
     }
 
     public struct AnimatorGraphData : ISystemStateComponentData
@@ -37,6 +37,7 @@ namespace Higo.Animation.Controller
     public struct AnimatorLayerBuffer : IBufferElementData
     {
         public float Weight;
+        public float ActiveStateIndex;
     }
 
     public struct AnimatorStateBuffer : IBufferElementData

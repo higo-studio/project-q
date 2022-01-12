@@ -1,6 +1,7 @@
 using Unity.Collections;
 using Unity.Animation;
 using Unity.Entities;
+using UnityEngine;
 namespace Higo.Animation.Controller
 {
     public static class AnimatorConversion
@@ -22,6 +23,11 @@ namespace Higo.Animation.Controller
         //         return builder.CreateBlobAssetReference<AnimatorBlob>(Allocator.Persistent);
         //     }
         // }
+
+        public static void TT(Animator a)
+        {
+            
+        }
     }
 
 }

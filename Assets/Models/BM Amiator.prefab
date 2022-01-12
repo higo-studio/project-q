@@ -272,10 +272,16 @@ MonoBehaviour:
       Motion: {fileID: 0}
       Tree: {fileID: 20600000, guid: d20ea843a908f0b4291fd74525ecc0df, type: 2}
       Speed: 1
+      TransitionInfos:
+      - NextStateIndex: 0
+        ExitTime: 0
+        TransitionTime: 0
+        EnterTime: 0
     - Type: 1
       Motion: {fileID: 0}
       Tree: {fileID: 20600000, guid: 3f6ecc83509545146badf4629b2cfd5e, type: 2}
       Speed: 1
+      TransitionInfos: []
   - name: Upper Layer
     channelWeightMap:
     - Id: {fileID: 6236932233965326570}
@@ -303,11 +309,14 @@ MonoBehaviour:
       Motion: {fileID: 7400000, guid: 1de0829d5c0b4174486a2fbb17e9805a, type: 2}
       Tree: {fileID: 20600000, guid: d20ea843a908f0b4291fd74525ecc0df, type: 2}
       Speed: 1
+      TransitionInfos: []
     - Type: 0
       Motion: {fileID: 7400000, guid: 4b9171ddc24ede948bd9a5c645c6c637, type: 2}
       Tree: {fileID: 20600000, guid: 3f6ecc83509545146badf4629b2cfd5e, type: 2}
       Speed: 1
+      TransitionInfos: []
     - Type: 0
       Motion: {fileID: 7400000, guid: 7e917c046fd7fd84ba70f56abc2ab48b, type: 2}
       Tree: {fileID: 20600000, guid: 3f6ecc83509545146badf4629b2cfd5e, type: 2}
       Speed: 1
+      TransitionInfos: []

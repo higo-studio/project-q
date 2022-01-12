@@ -119,44 +119,72 @@ namespace Higo.Animation.Controller
                 };
             }
 
-            ref var rawData = ref setup.ValueRef.Value;
-            using (var builder = new BlobBuilder(Allocator.Temp))
+            ref var setupData = ref setup.ValueRef.Value;
+            ref var layerDatas = ref setupData.layerDatas;
+            for (var layerIdx = 0; layerIdx < layerDatas.Length; layerIdx++)
             {
-                ref var root = ref builder.ConstructRoot<AnimatorNodeData>();
-                root.totalStateCount = rawData.totalStateCount;
-                var layerDatas = builder.Allocate(ref root.layerDatas, rawData.layerDatas.Length);
-                for (var layerIdx = 0; layerIdx < layerDatas.Length; layerIdx++)
-                {
-                    ref var layer = ref layerDatas[layerIdx];
-                    ref var layerRaw = ref rawData.layerDatas[layerIdx];
-                    layer.ChannelWeightTableRef = layerRaw.ResourceId >= 0 ? maskRes[layerRaw.ResourceId].ValueRef : default;
-                    var stateDatas = builder.Allocate(ref layer.stateDatas, layerRaw.stateDatas.Length);
+                ref var layer = ref layerDatas[layerIdx];
+                layer.ChannelWeightTableRef = layer.ResourceId >= 0 ? maskRes[layer.ResourceId].ValueRef : default;
 
-                    for (var stateIdx = 0; stateIdx < stateDatas.Length; stateIdx++)
+                for (var stateIdx = 0; stateIdx < layer.stateDatas.Length; stateIdx++)
+                {
+                    ref var state = ref layer.stateDatas[stateIdx];
+                    switch (state.Type)
                     {
-                        ref var state = ref stateDatas[stateIdx];
-                        ref var stateRaw = ref layerRaw.stateDatas[stateIdx];
-                        state.Hash = stateRaw.Hash;
-                        state.Type = stateRaw.Type;
-                        state.IdInBuffer = stateRaw.IdInBuffer;
-                        switch (state.Type)
-                        {
-                            case AnimatorStateType.Clip:
-                                state.ResourceRef = clipRes[stateRaw.ResourceId].ValueRef;
-                                break;
-                            case AnimatorStateType.Blend1D:
-                                state.ResourceRef = BlendTreeBuilder.CreateBlendTree1DFromComponents(b1dRes[stateRaw.ResourceId], EntityManager, entity);
-                                break;
-                            case AnimatorStateType.Blend2D:
-                                state.ResourceRef = BlendTreeBuilder.CreateBlendTree2DFromComponents(b2dRes[stateRaw.ResourceId], EntityManager, entity);
-                                break;
-                        }
+                        case AnimatorStateType.Clip:
+                            state.ResourceRef = clipRes[state.ResourceId].ValueRef;
+                            break;
+                        case AnimatorStateType.Blend1D:
+                            state.ResourceRef = BlendTreeBuilder.CreateBlendTree1DFromComponents(b1dRes[state.ResourceId], EntityManager, entity);
+                            break;
+                        case AnimatorStateType.Blend2D:
+                            state.ResourceRef = BlendTreeBuilder.CreateBlendTree2DFromComponents(b2dRes[state.ResourceId], EntityManager, entity);
+                            break;
                     }
                 }
-                set.SendMessage(
-                    data.AnimatorNode, AnimatorNode.SimulationPorts.NodeData,
-                    builder.CreateBlobAssetReference<AnimatorNodeData>(Allocator.Persistent));
             }
+            set.SendMessage(
+                data.AnimatorNode, AnimatorNode.SimulationPorts.NodeData,
+                in setup.ValueRef);
+
+            //using (var builder = new BlobBuilder(Allocator.Temp))
+            //{
+            //    ref var root = ref builder.ConstructRoot<AnimatorNodeData>();
+            //    root.totalStateCount = rawData.totalStateCount;
+            //    var layerDatas = builder.Allocate(ref root.layerDatas, rawData.layerDatas.Length);
+
+            //    for (var layerIdx = 0; layerIdx < layerDatas.Length; layerIdx++)
+            //    {
+            //        ref var layer = ref layerDatas[layerIdx];
+            //        ref var layerRaw = ref rawData.layerDatas[layerIdx];
+            //        layer.ChannelWeightTableRef = layerRaw.ResourceId >= 0 ? maskRes[layerRaw.ResourceId].ValueRef : default;
+            //        var stateDatas = builder.Allocate(ref layer.stateDatas, layerRaw.stateDatas.Length);
+
+            //        for (var stateIdx = 0; stateIdx < stateDatas.Length; stateIdx++)
+            //        {
+            //            ref var state = ref stateDatas[stateIdx];
+            //            ref var stateRaw = ref layerRaw.stateDatas[stateIdx];
+            //            state.Hash = stateRaw.Hash;
+            //            state.Type = stateRaw.Type;
+            //            state.IdInBuffer = stateRaw.IdInBuffer;
+            //            switch (state.Type)
+            //            {
+            //                case AnimatorStateType.Clip:
+            //                    state.ResourceRef = clipRes[stateRaw.ResourceId].ValueRef;
+            //                    break;
+            //                case AnimatorStateType.Blend1D:
+            //                    state.ResourceRef = BlendTreeBuilder.CreateBlendTree1DFromComponents(b1dRes[stateRaw.ResourceId], EntityManager, entity);
+            //                    break;
+            //                case AnimatorStateType.Blend2D:
+            //                    state.ResourceRef = BlendTreeBuilder.CreateBlendTree2DFromComponents(b2dRes[stateRaw.ResourceId], EntityManager, entity);
+            //                    break;
+            //            }
+            //        }
+            //    }
+            //    set.SendMessage(
+            //        data.AnimatorNode, AnimatorNode.SimulationPorts.NodeData,
+            //        builder.CreateBlobAssetReference<AnimatorNodeData>(Allocator.Persistent));
+            //}
 
             set.SendMessage(data.AnimatorNode, AnimatorNode.SimulationPorts.Rig, in rig);
             return data;
@@ -207,14 +235,22 @@ namespace Higo.Animation.Controller
         }
     }
 
-    //public static class AnimationUtil
-    //{
-    //    public static void SetClip(this ref AnimatorLayerResource layerRes, ref AnimatorStateBuffer stateParamBuffer, StringHash hash)
-    //    {
-    //        for (var i = 0; i < layerRes.StateCount; i++)
-    //        {
-    //            var stateResIdx = i + layerRes.StateStartIndex;
-    //        }
-    //    }
-    //}
+    public static class AnimationUtil
+    {
+        public static void SetClip(this ref AnimatorSetup setup, int layerIndex, string hash, ref DynamicBuffer<AnimatorStateBuffer> stateBuffer)
+        {
+            SetClip(ref setup, layerIndex, new StringHash(hash), ref stateBuffer);
+        }
+        public static void SetClip(this ref AnimatorSetup setup, int layerIndex, StringHash hash, ref DynamicBuffer<AnimatorStateBuffer> stateBuffer)
+        {
+            ref var nodeData = ref setup.ValueRef.Value;
+            ref var layer = ref nodeData.layerDatas[layerIndex];
+            for (var stateIdx = 0; stateIdx < layer.stateDatas.Length; stateIdx++)
+            {
+                ref var state = ref layer.stateDatas[stateIdx];
+                ref var stateRuntime = ref stateBuffer.ElementAt(state.IdInBuffer);
+                stateRuntime.Weight = state.Hash == hash ? 1 : 0;
+            }
+        }
+    }
 }

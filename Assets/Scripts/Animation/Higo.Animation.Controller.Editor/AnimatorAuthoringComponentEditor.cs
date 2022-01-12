@@ -18,6 +18,7 @@ public class AnimatorAuthoringComponentEditor : Editor
     bool countLocked = true;
     bool defailtFoldout = false;
     bool maskFoldout = false;
+    bool transitionFoldout = false;
     protected void OnEnable()
     {
         layersProperty = serializedObject.FindProperty("Layers");
@@ -81,6 +82,42 @@ public class AnimatorAuthoringComponentEditor : Editor
             }
             EditorGUI.indentLevel--;
         }
+
+        if (transitionFoldout = EL.Foldout(transitionFoldout, "State Transition", true))
+        {
+            EditorGUI.indentLevel++;
+            for (var i = 0; i < layersProperty.arraySize; i++)
+            {
+                var ele = layersProperty.GetArrayElementAtIndex(i);
+                var layerNameProperty = ele.FindPropertyRelative("name");
+                EL.LabelField(layerNameProperty.stringValue);
+                var states = ele.FindPropertyRelative("states");
+                EditorGUI.indentLevel++;
+                for (var stateIdx = 0; stateIdx < states.arraySize; stateIdx++)
+                {
+                    var stateEle = states.GetArrayElementAtIndex(stateIdx);
+                    var transitionEle = stateEle.FindPropertyRelative("TransitionInfos");
+                    var type = stateEle.FindPropertyRelative("Type");
+                    var clipName = "None";
+                    switch ((AnimatorStateType)type.enumValueIndex)
+                    {
+                        case AnimatorStateType.Clip:
+                            var clip = stateEle.FindPropertyRelative("Motion");
+                            clipName = (clip.objectReferenceValue as AnimationClip)?.name;
+                            break;
+                        case AnimatorStateType.Blend1D:
+                        case AnimatorStateType.Blend2D:
+                            var tree = stateEle.FindPropertyRelative("Tree");
+                            clipName = (tree.objectReferenceValue as UnityEditor.Animations.BlendTree)?.name;
+                            break;
+
+                    }
+                    EL.PropertyField(transitionEle, new GUIContent($"State {stateIdx}({clipName})"));
+                }
+                EditorGUI.indentLevel--;
+            }
+            EditorGUI.indentLevel--;
+        }
         serializedObject.ApplyModifiedProperties();
     }
 
@@ -126,7 +163,7 @@ public class AnimatorAuthoringComponentEditor : Editor
 
                     rect.y += 2;
                     rect.height = EditorGUIUtility.singleLineHeight;
-                    EG.LabelField(rect, $"Element{index}");
+                    EG.LabelField(rect, $"State {index}");
                     rect.y += EditorGUIUtility.singleLineHeight + 2;
                     EG.PropertyField(rect, typeProp);
                     rect.y += EditorGUIUtility.singleLineHeight + 2;
@@ -165,7 +202,7 @@ public class AnimatorAuthoringComponentEditor : Editor
                 {
                     DragAndDrop.AcceptDrag();
                     var refs = DragAndDrop.objectReferences;
-                    foreach(var reff in refs)
+                    foreach (var reff in refs)
                     {
                         if (reff is Transform)
                         {
